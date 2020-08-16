@@ -1,5 +1,24 @@
 # System Design Exercises
 
+<p align="center">
+<img src="images/design/system_design_exercises.png"/>
+</p>
+
+## Terms
+
+* Scalability 
+    * Vertical Scaling
+    * Horizontal Scaling
+* Resiliency
+* Microservices Architecture
+* Monolith Architecture
+* Distributed System
+* Load Balancing
+* Fault Tolerance
+* Extensibility
+* Loose Coupling
+* Consistent Hashing
+
 ## Exercises
 
 For each of the system designs and architectures, answer the following:
