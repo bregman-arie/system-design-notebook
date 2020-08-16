@@ -12,7 +12,6 @@ Note: improvement is an improvement. It doesn't has to be the optimal solution. 
 
 #### Remote Database
 
-
 <details>
 <summary>The following is a system design of a remote database and three applications servers
 <p align="center">
@@ -25,21 +24,32 @@ Note: improvement is an improvement. It doesn't has to be the optimal solution. 
   * In case the remote database crashes, the app will stop working
 
 * How to improve:<br>
+  <p align="center">
   <img src="images/design/remote_database_2.png"/>
+  </p>
   * Replicate each database to the local app server. This has several advantages. First, we are not bound to latency anymore. Secondly, a fai
 
 * Further limitations:
   * We are bound now to bandwidth
   * If the remote database isn't accessible for a long period of time, we'll have an outdated database and each app has the potential to work against a different DB
-</details>
+</b></details>
 
 #### Remote Database v2
 
 <details>
-<summary>The following is the improvement of the previous system design
+<summary>The following is an improvement of the previous system design
+<p align="center">
 <img src="images/design/remote_database_2.png"/>
+</p>
 </summary><br><b>
-</details>
+
+* Limitations:
+  * Queries to database might be slow, even on the server itself where the app is running
+  * Once the remote database isn't available, the local databases will not by in sync
+
+* How to improve:<br>
+  <img src="images/design/remote_database_v2_1.png"/>
+</b></details>
 
 ## Contributions
 
