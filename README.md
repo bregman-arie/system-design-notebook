@@ -1,5 +1,3 @@
-# System Design Exercises
-
 <p align="center">
 <img src="images/system_design_exercises.png"/>
 </p>
@@ -10,7 +8,7 @@ For any improvements suggestions, questions or comment, please feel free to open
 * [Topics](#Topics)
 * [Exercises](#Exercises)
 * [Resources](#Resources)
-* [Q&A](#Q&A)
+* [Q&A](#Q&amp;A)
 
 ## Topics
 
@@ -42,7 +40,7 @@ For each of the system designs and architectures, answer the following:
 
 Note: not every improvement mentioned in the solution is the optimal solution or the only one.
 
-#### One request too many
+### One request too many
 
 <details>
 <summary>The following is probably the most simple design of a server handling requests
@@ -65,7 +63,7 @@ Note: not every improvement mentioned in the solution is the optimal solution or
 
 </b></details>
 
-#### In a far far database...
+### In a far far database...
 
 <details>
 <summary>The following is a system design of a remote database and three applications servers
@@ -89,7 +87,7 @@ Note: not every improvement mentioned in the solution is the optimal solution or
   * If the remote database isn't accessible for a long period of time, we'll have an outdated database and each app has the potential to work against a different DB
 </b></details>
 
-#### In a far far database... v2
+### In a far far database... v2
 
 <details>
 <summary>The following is an improvement of the previous system design
