@@ -3,53 +3,56 @@
 </p>
 
 This repository was created for educational purposes. Use it to learn system design step by step.
-For any improvements suggestions, questions or comment, please feel free to open an issue.
+For any improvements suggestions, questions or comments, please feel free to open an issue.
 
 * [Topics](#Topics)
 * [Exercises](#Exercises)
 * [Resources](#Resources)
-* [Q&A](#Q&amp;A)
+* [Q&A](common-qa.md)
 
 ## Topics
 
-It's recommended that before you try to solve any of the exercises, to first read about the following topics:
+It's recommended that before you try to solve any of the exercises, to first read about the topics below, either with the resources mentioned in this repo in the Resources section or your own favorite resources.
 
+* Requirements
+  * Functional
+  * Non-Functional
 * Scalability 
-    * Vertical Scaling
-    * Horizontal Scaling
+  * Vertical Scaling
+  * Horizontal Scaling
+* Availability
+* Performance
 * Resiliency
 * Microservices Architecture
 * Monolith Architecture
-* Distributed System
+* Cache
+  * Distributed Cache
+  * Cache Policy (aka Replacement Policy)
+    * LRU (least recently used)
 * Load Balancing
+  * Consistent Hashing
 * Fault Tolerance
+* Distributed System
 * Extensibility
 * Loose Coupling
-* Consistent Hashing
 * Design Level
-    * Low level design
-    * High level design
+  * Low level design
+  * High level design
 
 ## Exercises
 
-For each of the system designs and architectures, answer the following:
-
-* What are the limitations of the system design or architecture?
-* How to improve it?
-* Are there any limitations, after applying the improvements? If yes, are there any further improvements to apply?
-
-Note: not every improvement mentioned in the solution is the optimal solution or the only one.
+Note: not every improvement mentioned or solution is the most optimal or the only one.
 
 ### One request too many
 
 <details>
-<summary>The following is probably the most simple design of a server handling requests
+<summary>The following is a very simple architecture of a server handling requests from a client. What are the drawbacks of this design and how to improve it?
 <p align="center">
 <img src="images/design/one_request_too_many_1.png"/>
 </p>
 </summary><br><b>
 
-* Limitiations:
+* Limitations:
   * Load - at some point it's possible the server will not be able to handle more requests and it will fail or cause delays
   * Single point of failure - if the server goes down, nothing will be able to handle the requests
 
@@ -60,7 +63,51 @@ Note: not every improvement mentioned in the solution is the optimal solution or
 
 * Further limitations:
     * Load was handled as well as the server being a single point of failure but now the load balancer is a single point of failure
+</b></details>
 
+<details>
+<summary>Is there a way to improve the above design without adding an actual load balancer instance?</summary><br><b>
+
+Yes, one could use DNS load balancing
+</b></details>
+
+### Cache 101
+
+<details>
+<summary>The following is a simple architecture of a client making requests to web server which in turn, retrieves the data from a datastore. What are the drawbacks of this design and how to improve it?
+<p align="center">
+<img src="images/design/cache_basics_1.png"/>
+</p>
+</summary><br><b>
+
+* Limitations:
+  * Time - retrieving the data from the datastore every time a request is made from the client, might take a while
+  * Single point of failure - if the datastore is down (or even slow) it wouldn't be possible to handle the requests
+  * Load - the datastore getting all the requests can result in high load on the datastore which might result in a downtime
+
+* How to improve:<br>
+  <p align="center">
+  <img src="images/design/cache_basics_2.png"/>
+  </p>
+</b></details>
+
+<details>
+<summary>Are you able to explain what is Cache and in what cases you would use it?</summary><br><b>
+
+Why to use cache?
+
+  * Save time - Accessing a remote datastore, and in general making network calls, takes time
+  * Reduce load - Instead of the datastore handling all the requests, we can take some of its load and reduce by accessing the cache
+  * Avoid repetitive tasks - Instead of querying the data and processing it every time, do it once and store the result in the cache
+</b></details>
+
+<details>
+<summary>Why not storing everything in the cache?</summary><br><b>
+
+For multiple reasons:
+
+1. The hardware on which we store the cache is in some cases much more expensive
+2. More data in the cache, the bigger it gets and longer the put/get actions will take
 </b></details>
 
 ### In a far far database...
@@ -106,22 +153,21 @@ Note: not every improvement mentioned in the solution is the optimal solution or
 
 ## Resources
 
-There many great resources out there to learn about system design in other ways - videos, blogs, etc. I would like to mention some of them here:
+There many great resources out there to learn more about system design in different ways - videos, blogs, etc. I've gathered some of them here for you
 
-* [Gaurav Sen Youtube Channel](https://www.youtube.com/watch?v=xpDnVSmNFX0&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX) - Excellent series of videos on system design topics
+#### Youtube Channels
 
-# Q&A
+* [Gaurav Sen](https://www.youtube.com/watch?v=xpDnVSmNFX0&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX) - Excellent series of videos on system design topics
+* [System Design Interview](https://www.youtube.com/channel/UC9vLsnF6QPYuH51njmIooCQ)
 
-Q: Can I add my own exercises?
-A: Yes you can!
+#### Repositories
 
-Q: Why the exercises have strange names?
-A: Well, that's nice of you :'( Anyway, I was just trying to amuse myself while creating this project
+* [awesome-scalability](https://github.com/binhnguyennus/awesome-scalability) - "An updated and organized reading list for illustrating the patterns of scalable, reliable, and performant large-scale systems"
 
 ## Credits
 
-<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+<div>The icon in the banner made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 
 ## Contributions
 
-If you would like to contribute to the project, please read the contribution guidelines.
+If you would like to contribute to the project, please read the [contribution guidelines](CONTRIBUTING.md)
