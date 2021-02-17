@@ -1,18 +1,18 @@
 <p align="center">
-<img src="images/system_design_exercises.png"/>
+<img src="images/system_design_notebook.png"/>
 </p>
 
-This repository was created for educational purposes. Use it to learn system design step by step.
-For any improvements suggestions, questions or comments, please feel free to open an issue.
+> A curated collection of resources and exercises to help you learn about system design
 
 * [Topics](#Topics)
 * [Exercises](#Exercises)
+* [Questions](#Questions)
 * [Resources](#Resources)
 * [Q&A](common-qa.md)
 
 ## Topics
 
-It's recommended that before you try to solve any of the exercises, to first read about the topics below, either with the resources mentioned in this repo in the Resources section or your own favorite resources.
+It's recommended that before you try to solve any of the exercises, to first read about the topics below, either with the [resources](#Resources) mentioned in this repo in the Resources section or your own favorite resources.
 
 * Requirements
   * Functional
@@ -151,19 +151,49 @@ For multiple reasons:
   <img src="images/design/remote_database_v2_1.png"/>
 </b></details>
 
+## Questions
+
+<details>
+  <summary>Scalability</summary>
+
+* What is Scalability?
+</details>
+
 ## Resources
 
 There many great resources out there to learn more about system design in different ways - videos, blogs, etc. I've gathered some of them here for you
 
-#### Youtube Channels
+### By Topic
 
+<details>
+  <summary>Scalability</summary>
+
+#### Videos
+* [Harvard Scalability Lecture - 2012](https://www.youtube.com/watch?v=-W9F__D3oY4&ab_channel=JorgeScott)
+#### Repositories
+* [awesome-scalability](https://github.com/binhnguyennus/awesome-scalability) - "An updated and organized reading list for illustrating the patterns of scalable, reliable, and performant large-scale systems"
+</details>
+
+### By Resources Type
+
+<details>
+  <summary>Videos</summary>
+
+#### System Design
 * [Gaurav Sen](https://www.youtube.com/watch?v=xpDnVSmNFX0&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX) - Excellent series of videos on system design topics
 * [System Design Interview](https://www.youtube.com/channel/UC9vLsnF6QPYuH51njmIooCQ) - How to get through system design interviews. Covering both architecture and code
+#### Scalability
+* [Harvard Scalability Lecture - 2012](https://www.youtube.com/watch?v=-W9F__D3oY4&ab_channel=JorgeScott)
+</details>
 
-#### Repositories
+<details>
+  <summary>Repositories</summary>
 
+#### Scalability
 * [awesome-scalability](https://github.com/binhnguyennus/awesome-scalability) - "An updated and organized reading list for illustrating the patterns of scalable, reliable, and performant large-scale systems"
+#### System Design
 * [system-design-primer](https://github.com/donnemartin/system-design-primer) - "Learn how to design large-scale systems. Prep for the system design interview."
+</details>
 
 ## Credits
 
