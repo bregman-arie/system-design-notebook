@@ -5,18 +5,23 @@
 > A curated collection of resources and exercises to help you learn about system design
 
 * [Topics](#Topics)
+* [Topics Explained](#Topics-explained)
 * [Exercises](#Exercises)
 * [Questions](#Questions)
 * [Resources](#Resources)
+* [System Design Process](#system-design-process)
+* [Interview Tips](#system-design-interview-tips)
 * [Q&A](common-qa.md)
 
 ## Topics
 
-It's recommended that before you try to solve any of the exercises, to first read about the topics below, either with the [resources](#Resources) mentioned in this repo in the Resources section or your own favorite resources.
-
 * Requirements
   * Functional
   * Non-Functional
+* Basic architecture
+  * Client
+  * Server
+  * Dispatcher
 * Scalability 
   * Vertical Scaling
   * Horizontal Scaling
@@ -35,18 +40,78 @@ It's recommended that before you try to solve any of the exercises, to first rea
 * Distributed System
 * Extensibility
 * Loose Coupling
+* Proxy
+* CDN
+* Networking
+  * Latency
+  * Throughput
 * Design Level
   * Low level design
   * High level design
 
+## Topics Explained
+
+### Basic Architecture
+
+#### Client
+
+TODO
+
+#### Server
+
+TODO
+
+#### Dispatcher
+
+TODO
+
+### Networking
+
+TODO
+
+#### Latency
+
+The time it takes to perform a certain task/action
+
+#### Throughput
+
+The number of tasks/actions per unit of time
+
 ## Exercises
 
-Note: not every improvement mentioned or solution is the most optimal or the only one.
+Note: The names of the exercises are quotes from movies (sometimes little bit modified). If you can guess from which movie, please submit it to movies.md file in this way: [QUOTE] [MOVIE] [YOUR NAME]<br>
+Another note: Exercises may repeat themselves in different variations to practice and emphasize different concepts.
 
-### One request too many
+### Elementary, my dear Watson
 
 <details>
-<summary>The following is a very simple architecture of a server handling requests from a client. What are the drawbacks of this design and how to improve it?
+<summary>You have a website running on a single server. It's mostly running fine because only two users access it on weekly basis :'(. It suddenly becomes super popular and many users try to access it, but they are experiencing issues due to high load of the server. Two questions:
+  * What term/pattern in system design is referring to the issue you are experiencing?
+  * How can you deal with it (even if partially) WITHOUT adding more servers or changing the architecture?
+<p align="center">
+<img src="images/design/one_request_too_many_1.png"/>
+</p>
+</summary><br><b>
+
+  * Scalability. Your web server doesn't scale based on demand (= the additional users accessing your website) hence they are experiencing issues.
+  * Apply `vertical scaling` which means, adding more resources to your server - more CPU, more RAM. This way, your architecture doesn't change, but your website is able to serve more users.
+</b></details>
+
+<details>
+<summary>Will 'vertical scaling' solve your scale issues permanently? Is it the optimal solution?</summary><br><b>
+
+It might solve your issue for limited time, but you can't solely rely on it.
+Vertical scaling has limitations. You can't keep adding RAM, storage and CPU endlessly. Eventually you'll hit some physical limit where for example, you simply don't have anymore space in your server box and you bought the best components you could.
+</b></details>
+
+<details>
+<summary>Assuming you now can extend the architecture, what would you change?</summary><br><b>
+</b></details>
+
+### Perfectly balanced as all things should be
+
+<details>
+<summary>You have the following simple architecture of a server handling requests from a client. What are the drawbacks of this design and how to improve it?
 <p align="center">
 <img src="images/design/one_request_too_many_1.png"/>
 </p>
@@ -62,7 +127,7 @@ Note: not every improvement mentioned or solution is the most optimal or the onl
   </p>
 
 * Further limitations:
-    * Load was handled as well as the server being a single point of failure but now the load balancer is a single point of failure
+    * Load was handled as well as the server being a single point of failure, but now the load balancer is a single point of failure.
 </b></details>
 
 <details>
@@ -71,7 +136,7 @@ Note: not every improvement mentioned or solution is the most optimal or the onl
 Yes, one could use DNS load balancing
 </b></details>
 
-### Cache 101
+### Keep calm, all I want is your cash
 
 <details>
 <summary>The following is a simple architecture of a client making requests to web server which in turn, retrieves the data from a datastore. What are the drawbacks of this design and how to improve it?
@@ -110,7 +175,7 @@ For multiple reasons:
 2. More data in the cache, the bigger it gets and longer the put/get actions will take
 </b></details>
 
-### In a far far database...
+### In a galaxy far, far away...
 
 <details>
 <summary>The following is a system design of a remote database and three applications servers
@@ -134,7 +199,7 @@ For multiple reasons:
   * If the remote database isn't accessible for a long period of time, we'll have an outdated database and each app has the potential to work against a different DB
 </b></details>
 
-### In a far far database... v2
+### A bit on the slow side
 
 <details>
 <summary>The following is an improvement of the previous system design
@@ -153,15 +218,117 @@ For multiple reasons:
 
 ## Questions
 
-<details>
-  <summary>Scalability</summary>
+This is a more "simplified" version of exercises section. No drawings, no evolving exercises, no strange exercises names, just straightforward questions, each in its own category.
 
-* What is Scalability?
-</details>
+<details>
+<summary>Your website usually serves on average a dozen of users and has good CPU and RAM utilization. It suddenly becomes very popular and many users try to access your web server but they are experiencing issues, and CPU, RAM utilization seems to be on 100%. How would you describe the issue?</summary><br><b>
+
+Scalability issue. The web server doesn't scales :'(<br>
+In order to avoid such issues, the web server has to scale based on the usage. More users -> More CPU, RAM utilization -> Add more resources (= scale up). An
+When there are less users accessing the website, scale down.
+</b></details>
+
+### Scalability
+
+<details>
+<summary>Explain Scalability</summary><br><b>
+</b></details>
+
+<details>
+<summary>Explain "Vertical Scaling" and give an example where it can help to solve an issue</summary><br><b>
+
+Vertical scaling is the act of adding
+
+For example, you have a website which serve a class of 20 students. Suddenly, you are teaching multiple classes and your website has to service 40 students. In order to be able to do that, you might have to apply "vertical scaling" and add resources like RAM and CPU to the server running your website.
+</b></details>
+
+<details>
+<summary>Why we can't usually rely solely on "vertical scaling" to solve scaling issues?</summary><br><b>
+
+Because you can't keep upgrading forever a certain server. At some point, you'll hit limitations of buying the best components you could and not having additional space for more components. Maybe the best RAM you could buy is 10TB, but you actually need 19TB RAM to serve all the users.
+</b></details>
+
+<details>
+<summary></summary><br><b>
+</b></details>
+
+### Cache
+
+<details>
+<summary>Tell me everything you know about Cache</summary><br><b>
+</b></details>
+
+<details>
+<summary>True or False? While caching can reduce load time, it's increasing the load on the server</summary><br><b>
+
+False. If your server doesn't have to execute the request since the result is already in the cache, then it's actually the opposite - there is less load on the server in addition to reduced load times.
+</b></details>
+
+### Load Balancer
+
+<details>
+<summary>Tell me everything you know about Load Balancers</summary><br><b>
+</b></details>
+
+<details>
+<summary>What algorithms a load balancer can be using?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is an application load balancer?</summary><br><b>
+</b></details>
+
+<details>
+<summary>At what layers a load balancer can operate?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is DNS load balancing?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What are sticky sessions? What are their pros and cons?</summary><br><b>
+</b></details>
+
+### Networking
+
+<details>
+<summary>What is latency?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is latency of L1 cache reference vs. L2 cache reference?</summary><br><b>
+
+L1 cache reference latency is 0.5 nanosecond
+L2 cache reference latency is 7 nanosecond
+
+So basically the latency of L2 cache reference is 14x L1 cache reference.
+</b></details>
+
+### Misc
+
+<details>
+<summary>How operating systems able to run tasks simultaneously? for example, open a web browser while starting a game</summary><br><b>
+
+The CPU have multiple cores. Each task is executed by a different core.<br>
+Also, it might only appear to run simultaneously. If every process is getting CPU allocation every nanosecond, the user might think that both processes are running simultaneously.
+</b></details>
+
+<details>
+<summary>What is a VPS?</summary><br><b>
+
+[From wikipedia](https://en.wikipedia.org/wiki/Virtual_private_server): "A virtual private server (VPS) is a virtual machine sold as a service by an Internet hosting service."
+</b></details>
+
+<details>
+<summary>True or False? VPS is basically a shared server where each user is allocated with a portion of the server OS</summary><br><b>
+
+False. You get a private VM that no one else can or should use.
+</b></details>
 
 ## Resources
 
-There many great resources out there to learn more about system design in different ways - videos, blogs, etc. I've gathered some of them here for you
+There many great resources out there to learn about system design in different ways - videos, blogs, etc. I've gathered some of them here for you
 
 ### By Topic
 
@@ -194,6 +361,35 @@ There many great resources out there to learn more about system design in differ
 #### System Design
 * [system-design-primer](https://github.com/donnemartin/system-design-primer) - "Learn how to design large-scale systems. Prep for the system design interview."
 </details>
+
+<details>
+  <summary>Books</summary>
+</details>
+
+## System Design Process
+
+How to perform system design???
+
+## System Design Interview Tips
+
+If you are here because you have an system design interview, here a couple of suggestions
+
+### What to ask yourself when you see a design and asked to give an opinion on it
+
+Note: You might want to ask yourself these questions also after you've done performing a system design
+
+* Does it scale if I add more users?
+* Is there a single point of failure in the design?
+
+### What you might want to ask when you need to perform a system design
+
+* What are the requirements?
+  * How the system is used?
+  * How much users are expected to access the system?
+  * How often the users access the system?
+  * Where the users access the system from?
+
+* Are there any constraints?
 
 ## Credits
 
