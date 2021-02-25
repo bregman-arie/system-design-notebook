@@ -22,9 +22,14 @@
   * [Client](#Client)
   * [Server](#Server)
   * Dispatcher
-* Scalability 
-  * Vertical Scaling
-  * Horizontal Scaling
+* [Scalability](#scalability)
+  * [Vertical Scaling](#vertical-scaling)
+  * [Horizontal Scaling](#horizontal-scaling)
+  * [Scalability Factor](#scalability-factor)
+    * [Linear Scalability](#linear-scalability)
+    * [Sub-linear scalability](#sub-linear-scalability)
+    * [supra-linear scalability](#supra-linear-scalability)
+    * [Negative scalability](#negative-scalability)
 * Availability
 * Performance
 * Resiliency
@@ -79,7 +84,7 @@ Few examples:
 
 [Wikipedia](): "Scalability is the property of a system to handle a growing amount of work by adding resources to the system"
 
-Simply said, how well a system can handle bigger demand or work? If a system runs a database, does it able to handle more queries? If a system is streaming videos, does it able to provide service to twice the amount of users it supports today? the scalability of system is defined by the answer for such questions.
+Simply said, scalability is all about how well a system or an architecture can handle a bigger demand. Does it able to scale in a way that meets the workload requirements? More practically, if a system runs a database, does it able to handle more queries? If a service is streaming videos, does it able to provide the same quality of service to twice the amount of users it supports today? the scalability of system is defined by the answer for such questions.
 
 There are different ways to scale.
 
@@ -91,6 +96,10 @@ Adding additional resources to *the existing system/component/unit*. If we have 
   * Adding more storage/disks
   * Adding CPUs
 
+<p align="center">
+<img src="images/scalability/vertical_scaling.png"/>
+</p>
+
 #### Horizontal Scaling
 
 Adding more systems/units/components but at the same time, make them work together so it would seems to the client as if there is one system it interacts with.<br>
@@ -99,7 +108,30 @@ Few examples:
  * Instead of one web server, having two web servers with one load balancer balancing the traffic between them
  * Instead of one database server, having two databases
 
+<p align="center">
+<img src="images/scalability/horizontal_scaling.png"/>
+</p>
+
 #### Scalability Factor
+
+When you double the resources of your system (or design) you might expect your system to be able to handle double the workload as well, right? But this is not necessarily what will happen. Scalability factor is the term used to describe the workload your system is able to handle as a result of scaling your resources.
+
+##### Linear Scalability
+
+Linear Scalability happens when the workloads your system is able to handle scale accordingly to the scale in resources. The scalability factor remains constant as you scale.
+For example, you triple the resources of your system -> the system is able to handle triple the workloads. In reality, it's actually not the case most of the time.
+
+##### Sub-Linear Scalability
+
+A more realistic outcome of scaling systems would be that some resources or component may not scale as expected (or as other resources and components). So doubling the resources will actually lead to an improvement of only x1.5 in workloads handling. In this case the scalability factor will be lower than 1.0
+
+##### Supra-Linear Scalability
+
+This is the optimal outcome. You triple the workloads handling by "only" doubling your resources for example. In other words, the ratio in performance change is bigger than the ratio in scaling changes (e.g. adding more CPUs). A scalability factor in this case, is bigger than 1.0
+
+##### Negative Scalability
+
+It may sound crazy, but in some cases, scaling your system might actually lead to worse results and that's exactly what negative scalability is all about. Scalability factor is below 0.
 
 ### Networking
 
