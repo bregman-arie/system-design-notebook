@@ -18,9 +18,9 @@
 * Requirements
   * Functional
   * Non-Functional
-* Basic architecture
-  * Client
-  * Server
+* [Basic architecture](#basic-architecture)
+  * [Client](#Client)
+  * [Server](#Server)
   * Dispatcher
 * Scalability 
   * Vertical Scaling
@@ -55,19 +55,53 @@
 
 #### Client
 
-TODO
+A client refers to a software or hardware accessing a resource or a service that is served by a server.
+While in some cases the server and the client might be on the same system/host, in most cases they will be on separate systems.
+
+Examples for clients:
+
+* A Web browser that is used by a user to access a certain web page
+* A mobile phone that is used by the user to read emails
+
+<p align="center">
+<img src="images/design/one_request_too_many_1.png"/>
+</p>
 
 #### Server
 
-TODO
+A server, similarly to a client, can be a software or hardware, but as opposed to a client, its role is to serve the client. It can be by providing a certain resource to the client or let it use a service that is running on the server.
+Few examples:
 
-#### Dispatcher
+* A system that stores files and allow the user to access or download them
+* A system that runs a service which allows users to listen to music
 
-TODO
+### Scalability
+
+[Wikipedia](): "Scalability is the property of a system to handle a growing amount of work by adding resources to the system"
+
+Simply said, how well a system can handle bigger demand or work? If a system runs a database, does it able to handle more queries? If a system is streaming videos, does it able to provide service to twice the amount of users it supports today? the scalability of system is defined by the answer for such questions.
+
+There are different ways to scale.
+
+#### Vertical Scaling
+
+Adding additional resources to *the existing system/component/unit*. If we have a server, a vertical scaling might be done in one or more of the following ways:
+
+  * Adding more RAM to the server
+  * Adding more storage/disks
+  * Adding CPUs
+
+#### Horizontal Scaling
+
+Adding more systems/units/components but at the same time, make them work together so it would seems to the client as if there is one system it interacts with.<br>
+Few examples:
+
+ * Instead of one web server, having two web servers with one load balancer balancing the traffic between them
+ * Instead of one database server, having two databases
+
+#### Scalability Factor
 
 ### Networking
-
-TODO
 
 #### Latency
 
@@ -108,7 +142,7 @@ Vertical scaling has limitations. You can't keep adding RAM, storage and CPU end
 <summary>Assuming you now can extend the architecture, what would you change?</summary><br><b>
 </b></details>
 
-### Perfectly balanced as all things should be
+### Perfectly balanced, as all things should be
 
 <details>
 <summary>You have the following simple architecture of a server handling requests from a client. What are the drawbacks of this design and how to improve it?
