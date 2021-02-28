@@ -48,6 +48,9 @@
 * Proxy
 * CDN
 * Networking
+  * IP
+    * [Private IP](#private-ip)
+    * [Public IP](#public-ip)
   * Latency
   * Throughput
 * Design Level
@@ -69,7 +72,7 @@ Examples for clients:
 * A mobile phone that is used by the user to read emails
 
 <p align="center">
-<img src="images/design/one_request_too_many_1.png"/>
+<img src="images/design/basic_architecture.png"/>
 </p>
 
 #### Server
@@ -82,9 +85,19 @@ Few examples:
 
 ### Scalability
 
-[Wikipedia](): "Scalability is the property of a system to handle a growing amount of work by adding resources to the system"
+[Wikipedia](https://en.wikipedia.org/wiki/Scalability): "Scalability is the property of a system to handle a growing amount of work by adding resources to the system"
 
-Simply said, scalability is all about how well a system or an architecture can handle a bigger demand. Does it able to scale in a way that meets the workload requirements? More practically, if a system runs a database, does it able to handle more queries? If a service is streaming videos, does it able to provide the same quality of service to twice the amount of users it supports today? the scalability of system is defined by the answer for such questions.
+In simpler words, scalability is about answering the question whether a system or an architecture are able to scale in a way that meets the new workloads and demand.<br>
+More practically, answer questions like:
+  * if a system runs a database, does it able to handle more queries?
+  * if a system runs a service that stream videos to million users. Will it able to stream them the same way if the amount of users would triple itself?
+
+Also, scaling can be performed on different components. For example, in most cloud environments scaling is supported in case of:
+
+  * Compute hosts
+  * Virtual network functions
+  * VMs/Instances
+  * Containers
 
 There are different ways to scale.
 
@@ -118,7 +131,7 @@ When you double the resources of your system (or design) you might expect your s
 
 ##### Linear Scalability
 
-Linear Scalability happens when the workloads your system is able to handle scale accordingly to the scale in resources. The scalability factor remains constant as you scale.
+Linear Scalability happens when the workloads your system is able to handle scale accordingly to the scale in resources. The scalability factor remains constant as you scale.<br>
 For example, you triple the resources of your system -> the system is able to handle triple the workloads. In reality, it's actually not the case most of the time.
 
 ##### Sub-Linear Scalability
@@ -135,6 +148,21 @@ It may sound crazy, but in some cases, scaling your system might actually lead t
 
 ### Networking
 
+#### Public IP
+
+[Wikipedia](): "A public IP address, in common parlance, is a globally routable unicast IP address, meaning that the address is not an address reserved for use in private networks"
+
+From system design perspective, when you have a resources or a component, you would like everyone to be able to access to, whether for direct communication (like a web server) or as a gateway for other components (like a load balancer), you should use a public IP
+
+#### Private IP
+
+Whenever you don't want users to be  able to globally interact with a certain component or resource, you should use a private IP address. Few examples:
+
+  * Web servers that only the load balancer should communicate with them directly
+  * Internal servers that users outside the organization should access
+
+Private IPs, as opposed to public IPs, don't have to be unique and each separate network, can use the same addresses.
+
 #### Latency
 
 The time it takes to perform a certain task/action
@@ -148,14 +176,14 @@ The number of tasks/actions per unit of time
 Note: The names of the exercises are quotes from movies (sometimes little bit modified). If you can guess from which movie, please submit it to movies.md file in this way: [QUOTE] [MOVIE] [YOUR NAME]<br>
 Another note: Exercises may repeat themselves in different variations to practice and emphasize different concepts.
 
-### Elementary, my dear Watson
+### "Elementary, my dear Watson"
 
 <details>
-<summary>You have a website running on a single server. It's mostly running fine because only two users access it on weekly basis :'(. It suddenly becomes super popular and many users try to access it, but they are experiencing issues due to high load of the server. Two questions:
+<summary>You have a website running on a single server. It's mostly running fine because only two users access it on weekly basis :'(<br>It suddenly becomes super popular and many users try to access it, but they are experiencing issues due to high load of the server. Two questions:
   * What term/pattern in system design is referring to the issue you are experiencing?
   * How can you deal with it (even if partially) WITHOUT adding more servers or changing the architecture?
 <p align="center">
-<img src="images/design/one_request_too_many_1.png"/>
+<img src="images/design/basic_architecture.png"/>
 </p>
 </summary><br><b>
 
@@ -174,12 +202,12 @@ Vertical scaling has limitations. You can't keep adding RAM, storage and CPU end
 <summary>Assuming you now can extend the architecture, what would you change?</summary><br><b>
 </b></details>
 
-### Perfectly balanced, as all things should be
+### "Perfectly balanced, as all things should be"
 
 <details>
 <summary>You have the following simple architecture of a server handling requests from a client. What are the drawbacks of this design and how to improve it?
 <p align="center">
-<img src="images/design/one_request_too_many_1.png"/>
+<img src="images/design/basic_architecture.png"/>
 </p>
 </summary><br><b>
 
@@ -202,7 +230,24 @@ Vertical scaling has limitations. You can't keep adding RAM, storage and CPU end
 Yes, one could use DNS load balancing
 </b></details>
 
-### Keep calm, all I want is your cash
+### "For all my actions both public and private"
+
+<details>
+<summary>The following is an archictecture of a load balancer serving and three web servers. Assuming, we would like to have a secured architecture, that makes sense, where would you set a public IP and where would you set a private IP? 
+<p align="center">
+<img src="images/design/public_private_drag_and_drop.png"/>
+</p>
+</summary><br><b>
+
+<p align="center">
+<img src="images/design/public_private_drag_and_drop_solution.png"/>
+</p>
+
+It makes sense to hide the web servers behind the load balancers instead of giving users direct access to them, so each one of them will have a private IP assigned to it.
+The load balancer should have a public IP since, we excepy anyone who would like to access a certain web page/resource, to go through the load balanacer hence, it should be accessible to users.
+</b></details>
+
+### "Keep calm, all I want is your cash"
 
 <details>
 <summary>The following is a simple architecture of a client making requests to web server which in turn, retrieves the data from a datastore. What are the drawbacks of this design and how to improve it?
@@ -241,7 +286,7 @@ For multiple reasons:
 2. More data in the cache, the bigger it gets and longer the put/get actions will take
 </b></details>
 
-### In a galaxy far, far away...
+### "In a galaxy far, far away..."
 
 <details>
 <summary>The following is a system design of a remote database and three applications servers
@@ -265,7 +310,7 @@ For multiple reasons:
   * If the remote database isn't accessible for a long period of time, we'll have an outdated database and each app has the potential to work against a different DB
 </b></details>
 
-### A bit on the slow side
+### "A bit on the slow side"
 
 <details>
 <summary>The following is an improvement of the previous system design
@@ -315,19 +360,13 @@ Because you can't keep upgrading forever a certain server. At some point, you'll
 </b></details>
 
 <details>
-<summary></summary><br><b>
-</b></details>
-
-### Cache
-
-<details>
-<summary>Tell me everything you know about Cache</summary><br><b>
+<summary>What is "Horizontal Scaling"?</summary><br><b>
 </b></details>
 
 <details>
-<summary>True or False? While caching can reduce load time, it's increasing the load on the server</summary><br><b>
+<summary>Once we perform "Horizonal Scaling", by for example adding multiple web servers instead of having one server, how do we handle client acess to these servers? </summary><br><b>
 
-False. If your server doesn't have to execute the request since the result is already in the cache, then it's actually the opposite - there is less load on the server in addition to reduced load times.
+Using a load balancer
 </b></details>
 
 ### Load Balancer
@@ -356,7 +395,27 @@ False. If your server doesn't have to execute the request since the result is al
 <summary>What are sticky sessions? What are their pros and cons?</summary><br><b>
 </b></details>
 
+### Cache
+
+<details>
+<summary>Tell me everything you know about Cache</summary><br><b>
+</b></details>
+
+<details>
+<summary>True or False? While caching can reduce load time, it's increasing the load on the server</summary><br><b>
+
+False. If your server doesn't have to execute the request since the result is already in the cache, then it's actually the opposite - there is less load on the server in addition to reduced load times.
+</b></details>
+
 ### Networking
+
+<details>
+<summary>What is a public IP? In which scenarios, one should use a public IP?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is a private IP? In which scenarios, one should use a private IP?</summary><br><b>
+</b></details>
 
 <details>
 <summary>What is latency?</summary><br><b>
