@@ -41,12 +41,23 @@
     * LRU (least recently used)
 * Load Balancing
   * Consistent Hashing
+  * Techniques
+    * Round Robin
+    * Weighted Round Robin
+    * Least Connection
+    * Weighted Least Connection
+    * Resource Based
+    * Fixed Weighting
+    * Weighted Response Time
+    * Source IP Hash
+    * URL Hash
 * Fault Tolerance
 * Distributed System
 * Extensibility
 * Loose Coupling
 * Proxy
 * CDN
+* [DNS](#DNS)
 * Networking
   * IP
     * [Private IP](#private-ip)
@@ -171,6 +182,13 @@ The time it takes to perform a certain task/action
 
 The number of tasks/actions per unit of time
 
+### DNS
+
+[Wikipedia](https://en.wikipedia.org/wiki/Domain_Name_System): "Most prominently, it translates more readily memorized domain names to the numerical IP addresses needed for locating and identifying computer services and devices with the underlying network protocols."
+
+In other words, the most common use can of a DNS would be a address translation. It can be from a hostname to IP address and vice versa - from an IP address to a hostname.
+In addition, a DNS can be used for load balancing, using the round robin technique.
+
 ## Exercises
 
 Note: The names of the exercises are quotes from movies (sometimes little bit modified). If you can guess from which movie, please submit it to movies.md file in this way: [QUOTE] [MOVIE] [YOUR NAME]<br>
@@ -227,13 +245,21 @@ Vertical scaling has limitations. You can't keep adding RAM, storage and CPU end
 <details>
 <summary>Is there a way to improve the above design without adding an actual load balancer instance?</summary><br><b>
 
-Yes, one could use DNS load balancing
+Yes, one could use DNS load balancing.<br>
+Bonus question: which algorithm a DNS load balancer will use?
+</b></details>
+
+<details>
+<summary>What are the drawbacks of round robin algorithm in load balancing?</summary><br><b>
+
+  * A simple round robin algorithm knows nothing about the load and the spec of each server it forwards the requests to. It is possible, that multiple heavy workloads requests will get to the same server while other servers will got only lightweight requests which will result in one server doing most of the work, maybe even crashing at some point because it unable to handle all the heavy workloads requests by its own.
+  * Each request from the client creates a whole new session. This might be a problem for certain scenarios where you would like to perform multiple operations where the server has to know about the result of operation so basically, being sort of aware of the history it has with the client. In round robin, first request might hit server X, while second request might hit server Y and ask to continue processing the data that was processed on server X already.
 </b></details>
 
 ### "For all my actions both public and private"
 
 <details>
-<summary>The following is an archictecture of a load balancer serving and three web servers. Assuming, we would like to have a secured architecture, that makes sense, where would you set a public IP and where would you set a private IP? 
+<summary>The following is an architecture of a load balancer serving and three web servers. Assuming, we would like to have a secured architecture, that makes sense, where would you set a public IP and where would you set a private IP? 
 <p align="center">
 <img src="images/design/public_private_drag_and_drop.png"/>
 </p>
@@ -244,7 +270,21 @@ Yes, one could use DNS load balancing
 </p>
 
 It makes sense to hide the web servers behind the load balancers instead of giving users direct access to them, so each one of them will have a private IP assigned to it.
-The load balancer should have a public IP since, we excepy anyone who would like to access a certain web page/resource, to go through the load balanacer hence, it should be accessible to users.
+The load balancer should have a public IP since, we except anyone who would like to access a certain web page/resource, to go through the load balancer hence, it should be accessible to users.
+</b></details>
+
+<details>
+<summary>What load balancing techniques are there?</summary><br><b>
+
+  * Round Robin
+  * Weighted Round Robin
+  * Least Connection
+  * Weighted Least Connection
+  * Resource Based
+  * Fixed Weighting
+  * Weighted Response Time
+  * Source IP Hash
+  * URL Hash
 </b></details>
 
 ### "Keep calm, all I want is your cash"
@@ -376,7 +416,22 @@ Using a load balancer
 </b></details>
 
 <details>
-<summary>What algorithms a load balancer can be using?</summary><br><b>
+<summary>What load balancing techniques are there?</summary><br><b>
+
+  * Round Robin
+  * Weighted Round Robin
+  * Least Connection
+  * Weighted Least Connection
+  * Resource Based
+  * Fixed Weighting
+  * Weighted Response Time
+  * Source IP Hash
+  * URL Hash
+</b></details>
+
+<details>
+<summary>Do you neccesrialy need a dedicated load balancer instance to perform load balancing? (using the round robin technique for example)</summary><br><b>
+No, you can use a DNS server.
 </b></details>
 
 <details>
@@ -392,8 +447,31 @@ Using a load balancer
 </b></details>
 
 <details>
+<summary>What are the drawbacks of round robin algorithm in load balancing?</summary><br><b>
+
+  * A simple round robin algorithm knows nothing about the load and the spec of each server it forwards the requests to. It is possible, that multiple heavy workloads requests will get to the same server while other servers will got only lightweight requests which will result in one server doing most of the work, maybe even crashing at some point because it unable to handle all the heavy workloads requests by its own.
+  * Each request from the client creates a whole new session. This might be a problem for certain scenarios where you would like to perform multiple operations where the server has to know about the result of operation so basically, being sort of aware of the history it has with the client. In round robin, first request might hit server X, while second request might hit server Y and ask to continue processing the data that was processed on server X already.
+</b></details>
+
+<details>
 <summary>What are sticky sessions? What are their pros and cons?</summary><br><b>
 </b></details>
+
+<details>
+<summary>Explain each of the following load balancing techniques
+
+  * Round Robin
+  * Weighted Round Robin
+  * Least Connection
+  * Weighted Least Connection
+  * Resource Based
+  * Fixed Weighting
+  * Weighted Response Time
+  * Source IP Hash
+  * URL Hash
+</summary><br><b>
+</b></details>
+
 
 ### Cache
 
@@ -428,6 +506,16 @@ L1 cache reference latency is 0.5 nanosecond
 L2 cache reference latency is 7 nanosecond
 
 So basically the latency of L2 cache reference is 14x L1 cache reference.
+</b></details>
+
+### DNS
+
+<details>
+<summary>What is a DNS?</summary><br><b>
+</b></details>
+
+<details>
+<summary>Can you use DNS for load balancing?</summary><br><b>
 </b></details>
 
 ### Misc
