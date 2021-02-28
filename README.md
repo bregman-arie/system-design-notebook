@@ -56,7 +56,9 @@
 * Extensibility
 * Loose Coupling
 * Proxy
-* CDN
+* Storage
+  * RAID
+* [CDN](#CDN)
 * [DNS](#DNS)
 * Networking
   * IP
@@ -189,6 +191,19 @@ The number of tasks/actions per unit of time
 In other words, the most common use can of a DNS would be a address translation. It can be from a hostname to IP address and vice versa - from an IP address to a hostname.
 In addition, a DNS can be used for load balancing, using the round robin technique.
 
+### CDN
+
+[Cloudflare](https://www.cloudflare.com/en-gb/learning/cdn/what-is-a-cdn): "A content delivery network (CDN) refers to a geographically distributed group of servers which work together to provide fast delivery of Internet content."
+
+In other words, a content delivery network allows you to quickly transfer content by having servers with the content around the world or certain area. The client then, access these servers instead of the main server where the data originates from.
+
+<p align="center">
+<img src="images/cdn/cdn.png"/>
+</p>
+
+
+
+
 ## Exercises
 
 Note: The names of the exercises are quotes from movies (sometimes little bit modified). If you can guess from which movie, please submit it to movies.md file in this way: [QUOTE] [MOVIE] [YOUR NAME]<br>
@@ -235,7 +250,7 @@ Vertical scaling has limitations. You can't keep adding RAM, storage and CPU end
 
 * How to improve:<br>
   <p align="center">
-  <img src="images/design/one_request_too_many_2.png"/>
+  <img src="images/design/basic_architecture_with_load_balancer.png"/>
   </p>
 
 * Further limitations:
@@ -472,6 +487,11 @@ No, you can use a DNS server.
 </summary><br><b>
 </b></details>
 
+<details>
+<summary>Which load balancing technique would you use for e-commerce website? Why?</summary><br><b>
+
+One that supports sticky sessions so users returning to the website, would have their data loaded, in case the server don't use shared storage.
+</b></details>
 
 ### Cache
 
@@ -516,6 +536,18 @@ So basically the latency of L2 cache reference is 14x L1 cache reference.
 
 <details>
 <summary>Can you use DNS for load balancing?</summary><br><b>
+</b></details>
+
+### Storage
+
+<details>
+<summary>What is RAID?</summary><br><b>
+</b></details>
+
+### DNS
+
+<details>
+<summary>What is CDN?</summary><br><b>
 </b></details>
 
 ### Misc
