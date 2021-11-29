@@ -9,6 +9,7 @@
 * [Exercises](#Exercises)
 * [Questions](#Questions)
 * [Resources](#Resources)
+* [Designs of Real Systems](#designs-of-real-systems)
 * [System Design Process](#system-design-process)
 * [Interview Tips](#system-design-interview-tips)
 * [Q&A](common-qa.md)
@@ -33,6 +34,7 @@
 * Availability
 * Performance
 * Resiliency
+* Durability
 * Microservices Architecture
 * Monolith Architecture
 * Cache
@@ -51,6 +53,8 @@
     * Weighted Response Time
     * Source IP Hash
     * URL Hash
+  * Sticky Sessions
+  * Health Checks
 * Fault Tolerance
 * Distributed System
 * Extensibility
@@ -66,6 +70,9 @@
     * [Public IP](#public-ip)
   * Latency
   * Throughput
+* Databases
+  * Sharding
+  * Read Replicas
 * Design Level
   * Low level design
   * High level design
@@ -217,9 +224,6 @@ In other words, a content delivery network allows you to quickly transfer conten
 <p align="center">
 <img src="images/cdn/cdn.png"/>
 </p>
-
-
-
 
 ## Exercises
 
@@ -397,6 +401,46 @@ For multiple reasons:
 
 * How to improve:<br>
   <img src="images/design/remote_database_v2_1.png"/>
+</b></details>
+
+### "Always the same one"
+
+<details>
+<summary>Every request sent by the same client, is routed every time to a different web server. What problem the user might face with such design? How to fix it?
+<p align="center">
+<img src="images/design/load_balancer/lb_sticky_sessions.png"/>
+</p>
+</summary><br><b>
+
+* The problem: the user might need to authenticate every single request, because different web servers handle its requests.
+* A possible solution: use sticky sessions where the user is routed to the same instance every single time
+
+<img src="images/design/load_balancer/lb_sticky_sessions_fix.png"/>
+</b></details>
+
+### "Coming back to find we've failed"
+
+<details>
+<summary>You have a design of load balancer and a couple of web instances behind it. Sometimes the instances crash and the user report the application doesn't works for them. Name one possible way to deal with such situation.</summary><br><b>
+
+One possible way to deal with it, is by using health checks. Where an instance that doesn't pass the health check, will be excluded from the list of instances used by the load balancer to forward traffic to.
+<img src="images/design/load_balancer/load_balancer_health_checks.png"/>
+</b></details>
+
+### "In any major city, minding your own business is a science"
+
+<details>
+<summary>You have a production application using a database for reads and writes. Your organization would like to add another application to work against the same database but for analytics purposes (read only). What problem might arise from this new situation and what one improvement you can apply to the design?
+<p align="center">
+<img src="images/design/db/analytics_application_database.png"/>
+</p>
+</summary><br><b>
+
+Adding another application to work against the same database can create additional load on your database which may lead to issues since the additional load might reach the limits of your database capacity constraints.
+
+One improvement to the design could be to add a read replica instance of your database. This way the new application can work against the read replica instead of the original database. The replication will be asynchronous but in most cases, for analytics applications, that's good enough.
+
+<img src="images/design/db/analytics_application_database_improvement.png"/>
 </b></details>
 
 ## Questions
@@ -642,15 +686,67 @@ There many great resources out there to learn about system design in different w
 * [Introduction To Systems Design - 2020](https://medium.com/swlh/introduction-to-systems-design-9bdab73fb8)
 </details>
 
+## Designs of Real Systems
+
+This section covers system designs of real world applications.
+
+Each section here will include full details on the system. It's recommended, as part of your learning process, that you will NOT look at these full details and start by trying figuring them out by yourself. More specifically, for every system:
+
+  * Create a list of its functional requirements, features
+  * Create a list of its non functional requirements
+  * Design API spec
+  * Perform high-level design
+  * Perform detailed design
+
+### WhatsApp
+
+#### WhatsApp - Features / Functional Requirements
+
+  * Messaging with individuals and groups (send and receive)
+  * Sharing documents, images, videos
+  * User status - online, last seen, etc.
+  * Message status - delivered, read (and who read it)
+  * Encryption - encrypt end-to-end communication
+
+#### WhatsApp - Non Functional Requirements
+
+  * Scale
+  * Minimal Latency
+  * High Availability
+  * Consistency
+  * Durability
+
+#### WhatsApp - API Spec
+
+Messaging:
+
+  * Direct Chat Session
+    * Input: API key, user ID, user ID (recipient)
+  * Send Message
+    * Input: API key, session ID, message type, message
+
+User account:
+
+  * Register account
+    * Input: API key, user data
+  * Validate account
+    * Input: API key, user ID, validation code
+
+#### WhatsApp - System Design Overview
+
+#### Whatsapp - System Design Components
+
+
 ## System Design Process
 
-How to perform system design???
+How to perform system design?
+TODO(abregman): this section is not yet ready
 
 1. Define which quality attributes are important for your system - scalability, efficiency, reliability, etc.
 
 ## System Design Interview Tips
 
-If you are here because you have an system design interview, here a couple of suggestions
+If you are here because you have a system design interview, here are a couple of suggestions
 
 ### What to ask yourself when you see a design and asked to give an opinion on it
 
@@ -658,6 +754,7 @@ Note: You might want to ask yourself these questions also after you've done perf
 
 * Does it scale if I add more users?
 * Is there a single point of failure in the design?
+* Don't be shy about asking for clarifications on a given system design. Some system design are vague on purpose
 
 ### What you might want to ask when you need to perform a system design
 
@@ -666,8 +763,18 @@ Note: You might want to ask yourself these questions also after you've done perf
   * How much users are expected to access the system?
   * How often the users access the system?
   * Where the users access the system from?
-
 * Are there any constraints?
+* Ask for clarifications if needed. Sometimes instructions or requirements are vague on purpose.
+
+#### What to say at the beginning of the discussion on a system design
+
+* List the required features of the system
+* State problem you expect to encounter
+* State the traffic you expect the system to handle
+
+### What you might want to state during the design or the discussion
+
+* At each decision made about the system design, state what are the cons and pros of such decision
 
 ## Credits
 
