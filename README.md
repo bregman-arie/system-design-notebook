@@ -7,9 +7,13 @@
 * [Topics](#Topics)
 * [Topics Explained](#Topics-explained)
 * [Exercises](#Exercises)
+  * [AWS Cloud](#AWS-cloud-exercises)
+  * [Misc](#misc-exercises)
 * [Questions](#Questions)
 * [Resources](#Resources)
-* [Designs of Real Systems](#designs-of-real-systems)
+* [System Design](#system-designs)
+  * [Cloud](#cloud-system-design)
+  * [Real Systems](#real-systems-design)
 * [System Design Process](#system-design-process)
 * [Interview Tips](#system-design-interview-tips)
 * [Q&A](common-qa.md)
@@ -64,6 +68,9 @@
   * RAID
 * [CDN](#CDN)
 * [DNS](#DNS)
+    * Records
+      * TTL
+    * TLD and SLD
 * Networking
   * IP
     * [Private IP](#private-ip)
@@ -227,10 +234,135 @@ In other words, a content delivery network allows you to quickly transfer conten
 
 ## Exercises
 
+### AWS Cloud
+
+#### What time is it? (stateless application)
+
+<details>
+<summary>Design the most basic architecture for a web application (server based) that tells a single user what time is it (no DB, no scaling, ...) with maximum of two components
+</summary><br><b>
+
+<p align="center">
+<img src="images/design/aws_cloud/what_time_is_it_1.png"/>
+</p>
+
+In this case what you need is two components:
+
+* EC2 instance - this is where our application will run. A basic micro t2 instance is more than enough
+* Elastic IP address - This is the static IP address our user will use every time to reach the application. In case the instance is not operational, we could always move the IP address to one that it is (if we manage more than one instance)
+</b></details>
+
+#### "What time is it?" but with more than one user
+
+<details>
+<summary>Following the last exercise, your web app became a huge success and many users start using it. What might be the problem with moving from one user to multiple users and how to deal with it using a single improvement of the architecture?
+</summary><br><b>
+
+Your instance might not be strong enough to handle requests from multiple users and soon enough you might see RAM and CPU utilized fully. One way to deal with it is, to perform what is called "Vertical Scaling" which is the act of adding more resources to your instance. In AWS case, switching to an instance type with more resources like M5 for example.
+
+Note: The problem with vertical scaling (in case you have one node) is downtime (when upgrading the instance type, the instance will be down) so another thing you would want to do is "Horizontal Scaling" which is the act of adding more instances/resources.
+
+<p align="center">
+<img src="images/design/aws_cloud/what_time_is_it_2.png"/>
+</p>
+
+</b></details>
+
+#### "What time is it?" but without elastic IP addresses
+
+<details>
+<summary>Following the last two exercises, you would like to change the architecture offered in the solution, to not use elastic IP addresses for obvious reasons that it's not really scalable (each EC2 instance has a different IP and users are not able to remember them all). Offer an improvement
+</summary><br><b>
+
+Instead of using elastic IP addresses we can add a record in the DNS, using the Route 53 service, to have a record from the type A. This way, all users will be able to access the app using an hostname and the IP address will be provided to them by the DNS
+
+<p align="center">
+<img src="images/design/aws_cloud/what_time_is_it_3.png"/>
+</p>
+
+It's important to note that this solution is not optimal if you plan to scale down and up at some point. Due to the TTL value of a record, a user will keep contacting the same IP address, even if the node is already down.
+
+A more proper and complete architecture would be to use an ELB
+
+<p align="center">
+<img src="images/design/aws_cloud/what_time_is_it_4.png"/>
+</p>
+
+But even with ELB used and "Auto scaling group" for automatically scaling the nodes, this architecture is not optimal. Can you point what is the problem with current architecture? (from two different aspecs)
+</b></details>
+
+#### "What time is it?"  - Final Part
+
+<details>
+<summary>Following the last "What time is it?" exercise, state the issues with current architecture and what would you imrpove
+
+<p align="center">
+<img src="images/design/aws_cloud/what_time_is_it_4.png"/>
+</p>
+</summary><br><b>
+
+With current architecture, the application is perhaps able to scale up and down, but when the availability zone is down, your entire application is down. So the first improvement would be to make both ELB and the application itself (the EC2 instances) multi-AZ.
+
+Secondly, if you know you always need an instance (or two) for the application, you might want to have reserved nodes. Reserved nodes means you pay less for instances which means you save on costs.
+
+<p align="center">
+<img src="images/design/aws_cloud/what_time_is_it_5.png"/>
+</p>
+
+</b></details>
+
+#### "Video Games Shop" (stateful application)
+
+<details>
+<summary>The following architecture was proposed for an online video games shop with the requirements of:
+
+  * Support thousands of users at any given point of time
+  * Users can register
+  * Shopping cart items shouldn't be lost when the user browsing the store
+
+<p align="center">
+<img src="images/design/aws_cloud/video_games_shop_1.png"/>
+</p>
+
+The problem is that users report that when they browse for additional video games to buy, they lose their shopping cart. What is the problem with the current architecture and how to deal with it?
+</summary><br><b>
+
+Such application is a stateful application, meaning it's important that we'll keep the information about the client from one session to another. It seems that with current architecture, every time the user initiates new session, it's perform against a different instance without saving client information.
+
+There are a couple of solutions that can be applied in this case:
+  * Load Balancer Sticky Sessions: users will be redirected to the instance they initiated previously session with, in order to to not lose client's data. There is a disadvantage here of losing
+  * User cookies: the client/user stores the relevant data (shopping cart in this case) and in this case it doesn't matter with which EC2 instance the user interacts with, the data on the shopping cart will be sent from the client/user to the relevant instance. The disadvantages: HTTP requests are much heavier because data is attached with each request and it holds some security risks as cookies can be potentially modified
+</b></details>
+
+#### "Video Games Shop" - User Data
+
+<details>
+<summary>Following the last exercise, is there another way to deal with user's data (short and long term) except user's cookies and sticky sessions?
+</summary><br><b>
+
+There is something called "server session" where we need to add a new component to the architecture - ElastiCache or DynamoDB, to store the data on the shopping cart of each user. In order to identify it, we'll use a session ID which will be sent by the client/user every request
+
+For long term data (user name, address, etc.) we'll use a database (e.g. RDS). There are a couple of variations as to how we can use it. A master instance where we'll write the data and a replication from which we'll read data:
+
+<p align="center">
+<img src="images/design/aws_cloud/video_games_shop_2.png"/>
+</p>
+
+A different approach can be to use Cache + DB, where for each session, we'll check if the data is in the cache and if it's not, then we'll access the DB (this is also called "Write Through"): 
+
+<p align="center">
+<img src="images/design/aws_cloud/video_games_shop_3.png"/>
+</p>
+
+</b></details>
+
+
+### Misc
+
 Note: The names of the exercises are quotes from movies (sometimes little bit modified). If you can guess from which movie, please submit it to movies.md file in this way: [QUOTE] [MOVIE] [YOUR NAME]<br>
 Another note: Exercises may repeat themselves in different variations to practice and emphasize different concepts.
 
-### "Elementary, my dear Watson"
+#### "Elementary, my dear Watson"
 
 <details>
 <summary>You have a website running on a single server. It's mostly running fine because only two users access it on weekly basis :'(<br>It suddenly becomes super popular and many users try to access it, but they are experiencing issues due to high load of the server. Two questions:
@@ -256,7 +388,7 @@ Vertical scaling has limitations. You can't keep adding RAM, storage and CPU end
 <summary>Assuming you now can extend the architecture, what would you change?</summary><br><b>
 </b></details>
 
-### "Perfectly balanced, as all things should be"
+#### "Perfectly balanced, as all things should be"
 
 <details>
 <summary>You have the following simple architecture of a server handling requests from a client. What are the drawbacks of this design and how to improve it?
@@ -292,7 +424,7 @@ Bonus question: which algorithm a DNS load balancer will use?
   * Each request from the client creates a whole new session. This might be a problem for certain scenarios where you would like to perform multiple operations where the server has to know about the result of operation so basically, being sort of aware of the history it has with the client. In round robin, first request might hit server X, while second request might hit server Y and ask to continue processing the data that was processed on server X already.
 </b></details>
 
-### "For all my actions both public and private"
+#### "For all my actions both public and private"
 
 <details>
 <summary>The following is an architecture of a load balancer serving and three web servers. Assuming, we would like to have a secured architecture, that makes sense, where would you set a public IP and where would you set a private IP? 
@@ -323,7 +455,7 @@ The load balancer should have a public IP since, we except anyone who would like
   * URL Hash
 </b></details>
 
-### "Keep calm, all I want is your cash"
+#### "Keep calm, all I want is your cash"
 
 <details>
 <summary>The following is a simple architecture of a client making requests to web server which in turn, retrieves the data from a datastore. What are the drawbacks of this design and how to improve it?
@@ -362,7 +494,7 @@ For multiple reasons:
 2. More data in the cache, the bigger it gets and longer the put/get actions will take
 </b></details>
 
-### "In a galaxy far, far away..."
+#### "In a galaxy far, far away..."
 
 <details>
 <summary>The following is a system design of a remote database and three applications servers
@@ -386,7 +518,7 @@ For multiple reasons:
   * If the remote database isn't accessible for a long period of time, we'll have an outdated database and each app has the potential to work against a different DB
 </b></details>
 
-### "A bit on the slow side"
+#### "A bit on the slow side"
 
 <details>
 <summary>The following is an improvement of the previous system design
@@ -403,7 +535,7 @@ For multiple reasons:
   <img src="images/design/remote_database_v2_1.png"/>
 </b></details>
 
-### "Always the same one"
+#### "Always the same one"
 
 <details>
 <summary>Every request sent by the same client, is routed every time to a different web server. What problem the user might face with such design? How to fix it?
@@ -418,7 +550,7 @@ For multiple reasons:
 <img src="images/design/load_balancer/lb_sticky_sessions_fix.png"/>
 </b></details>
 
-### "Coming back to find we've failed"
+#### "Coming back to find we've failed"
 
 <details>
 <summary>You have a design of load balancer and a couple of web instances behind it. Sometimes the instances crash and the user report the application doesn't works for them. Name one possible way to deal with such situation.</summary><br><b>
@@ -427,7 +559,7 @@ One possible way to deal with it, is by using health checks. Where an instance t
 <img src="images/design/load_balancer/load_balancer_health_checks.png"/>
 </b></details>
 
-### "In any major city, minding your own business is a science"
+#### "In any major city, minding your own business is a science"
 
 <details>
 <summary>You have a production application using a database for reads and writes. Your organization would like to add another application to work against the same database but for analytics purposes (read only). What problem might arise from this new situation and what one improvement you can apply to the design?
@@ -686,7 +818,129 @@ There many great resources out there to learn about system design in different w
 * [Introduction To Systems Design - 2020](https://medium.com/swlh/introduction-to-systems-design-9bdab73fb8)
 </details>
 
-## Designs of Real Systems
+## System Designs
+
+### Cloud
+
+#### "What Is The Time" web application
+
+* Purpose: Let people know what is the time
+
+### General Systems
+
+This section covers system designs of different types of applications. Nothing too specific, but yet quite common in the real world as a type of application.
+
+For each type of application we are going to mention its:
+
+  * Requirements
+  * API endpoints (public and internal)
+
+#### Payment and Reservation System for Parking Garages
+
+Design a payment and reservation system for parking garages that supports three type of vehicles:
+
+  * regular
+  * large
+  * compact
+
+With flat rate based on vehicle type and time
+
+Note: if you've been told to design this type of system without any other requirements, the rate and special parking, is something you should ask about.
+
+#### Payment and Reservation System for Parking Garages - Clarifications
+
+Ask clarifying questions such as:
+
+  * Who are the users and how they are going to use the system?
+  * What inputs and outputs should the system support?
+  * How much data do we expect the system to handle?
+    * How many requests per second?
+
+#### Payment and Reservation System for Parking Garages - Requirements
+
+* User to be able to reserve a parking spot and receive a ticket
+* User can't reserve a parking spot reserved by someone else
+* System to support the following types of vehicles: regular, large and compact
+* System to support flat rate based on vehicle type and time the vehicle spent in the parking
+
+#### Payment and Reservation System for Parking Garages - API (Public Endpoints)
+
+* `/reserve`
+  * Parameters: garage_id, start_time, end_time
+  * Returns: (spot_id, reservation_id)
+
+* `/cancel`
+  * Parameters: reservation_id
+
+* `/payment`
+  * Parameters: reservation_id
+  * Use existing API like Squre, PayPal, Stripe, etc.
+
+#### Payment and Reservation System for Parking Garages - API (Internal Endpoints)
+
+* `/calculate_payment` - calculate the payment for reserving a parking spot
+  * Parameters: reservation_id
+
+* `/free_spots` - get free spots where the car can park (note: small car might be able to park in bigger car spot)
+  * Parameters: garage_id, vehicle_type, time
+
+* `/allocate_spot` - do the actual reservation of a parking spot
+  * Parameters: garage_id, vehicle_type, time
+
+* `/create_account` - the ability to create an account so users can use the app and reserve parking spots
+  * Parameters: email, username, first_name (optional), last_name (optional), password (optional)
+
+* `/login`
+  * Parameters: email, username (optional), password
+
+#### Payment and Reservation System for Parking Garages - Scale
+
+We can assume that the number of users is limited to the number of parking spots in each garage and taking into account the number of garages of course.<br>
+Given that, users scale is pretty predictable and can't reach unexpected count (assuming no new garages can be added or fixed rate of new garages being added)
+
+#### Payment and Reservation System for Parking Garages - Data Scheme
+
+SQL based database with the following tables
+
+Reservations
+
+| Field       | Type                |
+| ----------- | --------------------|
+| id          | primary key, serial |
+| start       | timestamp           |
+| end         | timestamp           |
+| paid        | boolean             |
+
+Garages
+
+| Field        | Type                |
+| ------------ | --------------------|
+| id           | primary key, serial |
+| zipcode      | varchar             |
+| rate_compact | decimal             |
+| rate_compact | decimal             |
+| rate_regular | decimal             |
+| rate_large   | decimal             |
+
+Spots
+
+| Field        | Type                |
+| ------------ | --------------------|
+| id           | primary key, serial |
+| garage_id    | foreign_key, int    |
+| vehicle_type | enum                |
+| status       | enum                |
+
+Users
+
+| Field        | Type                |
+| ------------ | --------------------|
+| id           | primary key, serial |
+| email        | varchar (SHA-256)   |
+| first_name   | varchar             |
+| last_name    | varchar             |
+
+### Real Systems
 
 This section covers system designs of real world applications.
 
@@ -698,9 +952,9 @@ Each section here will include full details on the system. It's recommended, as 
   * Perform high-level design
   * Perform detailed design
 
-### WhatsApp
+#### WhatsApp
 
-#### WhatsApp - Features / Functional Requirements
+##### WhatsApp - Features / Functional Requirements
 
   * Messaging with individuals and groups (send and receive)
   * Sharing documents, images, videos
@@ -708,7 +962,7 @@ Each section here will include full details on the system. It's recommended, as 
   * Message status - delivered, read (and who read it)
   * Encryption - encrypt end-to-end communication
 
-#### WhatsApp - Non Functional Requirements
+##### WhatsApp - Non Functional Requirements
 
   * Scale
   * Minimal Latency
@@ -716,7 +970,7 @@ Each section here will include full details on the system. It's recommended, as 
   * Consistency
   * Durability
 
-#### WhatsApp - API Spec
+##### WhatsApp - API Spec
 
 Messaging:
 
@@ -732,10 +986,9 @@ User account:
   * Validate account
     * Input: API key, user ID, validation code
 
-#### WhatsApp - System Design Overview
+##### WhatsApp - System Design Overview
 
-#### Whatsapp - System Design Components
-
+##### Whatsapp - System Design Components
 
 ## System Design Process
 
@@ -748,7 +1001,9 @@ TODO(abregman): this section is not yet ready
 
 If you are here because you have a system design interview, here are a couple of suggestions
 
-### What to ask yourself when you see a design and asked to give an opinion on it
+More specific suggestions based on the phase of the interview:
+
+### What to ask yourself when you see a system design
 
 Note: You might want to ask yourself these questions also after you've done performing a system design
 
@@ -756,7 +1011,7 @@ Note: You might want to ask yourself these questions also after you've done perf
 * Is there a single point of failure in the design?
 * Don't be shy about asking for clarifications on a given system design. Some system design are vague on purpose
 
-### What you might want to ask when you need to perform a system design
+### What to ask the interviewer
 
 * What are the requirements?
   * How the system is used?
