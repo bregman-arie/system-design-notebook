@@ -60,7 +60,9 @@
   * Sticky Sessions
   * Health Checks
 * Fault Tolerance
-* Distributed System
+* [Distributed System](#distributed-systems)
+  * [Fallacies of distributed systems](#fallacies-of-distributed-systems)
+  * [Clock Drift](#clock-drift)
 * Extensibility
 * Loose Coupling
 * Proxy
@@ -72,6 +74,7 @@
       * TTL
     * TLD and SLD
 * Networking
+  * Bandwidth
   * IP
     * [Private IP](#private-ip)
     * [Public IP](#public-ip)
@@ -221,6 +224,25 @@ The number of tasks/actions per unit of time
 
 In other words, the most common use can of a DNS would be a address translation. It can be from a hostname to IP address and vice versa - from an IP address to a hostname.
 In addition, a DNS can be used for load balancing, using the round robin technique.
+
+### Distributed Systems
+
+#### Fallacies of distributed systems
+
+There are some challenges that we have to deal with when designing and managing distributed/high-scale systems, but not so much with non-distributed systems:
+
+* Network Reliability: when you run a system on a single host, networking isn't as problem as when you need to to manage dozen or hundreds (and more) nodes
+* Zero Latency: running on a single host, latency is not an issue, but when managing multiple hosts, how to keep latency as close as possible to zero?
+* Bandwidth: same a latency, when running on a single host, bandwidth is infinite, but when the system is distributed you have to move data between the server so bandwidth becomes a challenge 
+* Constantly changing Topology: In distributed system, hosts and different components may go down or up meaning, the topology is constantly changing while a single host is a constant
+* Security: keeping one host secured is much more simple than securing a distributed system where not only all components should be secured but also the communication between the different hosts and components
+* Size of the team: managing one host requires less administrators than managing a distributed system with hundreds, thousands or even more hosts and components
+
+### Clock Drift
+
+[Wikipedia](https://en.wikipedia.org/wiki/Clock_drift): "Clock drift refers to several related phenomena where a clock does not run at exactly the same rate as a reference clock. That is, after some time the clock "drifts apart" or gradually desynchronizes from the other clock"
+
+Synchronizing clock is a challenge in distributed systems because each system has its own clock and once the system's clock drifts, this might affect the system as a whole and lead to unintended behaviours.
 
 ### CDN
 
@@ -764,6 +786,20 @@ Also, it might only appear to run simultaneously. If every process is getting CP
 False. You get a private VM that no one else can or should use.
 </b></details>
 
+### Distributed Systems
+
+<details>
+<summary>What are some of the challenges one has to face when designing and managing distributed systems, but not so much when dealing with systems/services running on a single host?</summary><br><b>
+
+See [Distributed Systems - Fallacies of distributed systems](#fallacies-of-distributed-systems)
+</b></details>
+
+<details>
+<summary>What is a clock drift in regards to distributed systems?</summary><br><b>
+
+See [Distributed System - Clock Drift](#clock-drift)
+</b></details>
+
 ## Resources
 
 There many great resources out there to learn about system design in different ways - videos, blogs, etc. I've gathered some of them here for you
@@ -939,6 +975,20 @@ Users
 | email        | varchar (SHA-256)   |
 | first_name   | varchar             |
 | last_name    | varchar             |
+
+Vehicles
+
+| Field        | Type                |
+| ------------ | --------------------|
+| id           | primary key, serial |
+| license      | varchar             |
+| type         | enum                |
+
+#### Payment and Reservation System for Parking Garages - High-level architecture
+
+<p align="center">
+<img src="images/design/apps/garage_payment_and_reservation/high_level_architecture.png"/>
+</p>
 
 ### Real Systems
 
