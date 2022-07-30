@@ -4,10 +4,11 @@
 
 > A curated collection of resources and exercises to help you learn about system design
 
-* [Topics](#Topics)
-* [Topics Explained](#Topics-explained)
-* [Exercises](#Exercises)
-  * [AWS Cloud](#AWS-cloud-exercises)
+* [Topics](#topics)
+* [Topics Explained](#topics-explained)
+* [Exercises](#exercises)
+  * [General](#general)
+  * [AWS Cloud](#aws-cloud)
   * [Misc](#misc-exercises)
 * [Questions](#Questions)
 * [Resources](#Resources)
@@ -17,6 +18,7 @@
 * [System Design Process](#system-design-process)
 * [Interview Tips](#system-design-interview-tips)
 * [Q&A](common-qa.md)
+* [Credits](credits.md)
 
 ## Topics
 
@@ -39,6 +41,8 @@
 * Performance
 * Resiliency
 * Durability
+* [Failover](#failover)
+  * [Cold Standby](#cold-standby)
 * Microservices Architecture
 * Monolith Architecture
 * Cache
@@ -73,7 +77,7 @@
     * Records
       * TTL
     * TLD and SLD
-* Networking
+* [Networking](#networking)
   * Bandwidth
   * IP
     * [Private IP](#private-ip)
@@ -92,7 +96,7 @@
 ### Requirements
 
 Usually a system design process starts with understanding the system's purpose and one way to understand system's purpose or goal, is to clearly define a list of requirements.<br>
-These requirements allow us not only to understand how the system will be used and how it works, but also set clear boundaries which will make sure our design is focused on the right aspects of the systems. We usually distinguish between functional and non-functional requirements.
+These requirements allow us not only to understand how the system will be used and how it works, but also set clear boundaries which will make sure our design is focused on the right aspects of the system design. We usually distinguish between functional and non-functional requirements.
 
 ### Functional Requirements
 
@@ -193,6 +197,15 @@ This is the optimal outcome. You triple the workloads handling by "only" doublin
 
 It may sound crazy, but in some cases, scaling your system might actually lead to worse results and that's exactly what negative scalability is all about. Scalability factor is below 0.
 
+### Failover
+
+Failover (or failover strategy) is the process of switching upon a failure from non-operational system (application, storage, DB, ...) to an operational system or a previous operational state of the same system.
+
+It used to be done either automatically or manually. Today, especially in the era of public clouds, this process is often automated.
+
+#### Cold Standby
+
+TODO
 ### Networking
 
 #### Public IP
@@ -255,6 +268,39 @@ In other words, a content delivery network allows you to quickly transfer conten
 </p>
 
 ## Exercises
+### General
+
+#### "Elementary, my dear Watson"
+
+<details>
+<summary>The following is an architecture of a server which runs a web server and a database on it. There are a dozen of clients connecting to the server. Answer the following questions
+
+<p align="center">
+<img src="images/design/general/basic_architecture_db_web.png"/>
+</p>
+
+1. Name two issues with this architecture
+   - What term/concept in system design used to describe one of the issues you specified?
+2. Suggest an improvement to the architecture **WITHOUT** adding more components
+   1. If the suggested improvement is "vertical scaling", is it a permanent improvement?
+3. Suggest two improvements to the architecture, given that additional components can be added
+</summary><br><b>
+
+1. Two issues:
+   1. Single point of failure - if the server is down, the users would not be able to connect the application and the server will have to be restored or created from scratch
+   2. If the web process is using all the RAM and/or CPU, then it might affect the DB since it won't have enough resource to handle requests. This is true also the opposite way of DB consuming all resources, not leaving enough for web server processes.
+      - The term used to describe the issue it "scalability". The server doesn't scale by demand and eventually users will experience issues
+
+2. Apply [vertical scaling](#vertical-scaling). By adding more resources to the server (i.e. CPU & RAM) it will allow it to handle more load. This is nota  permanent solution because at some point the load might scale to a point where it's not possible to add more RAM and CPU to the instance nor it's really worthwhile.
+
+3. The two improvements would be:
+   1. Separate DB and web server into two components (instead of both running on the same instance)
+   2. Apply [horizontal scaling](#horizontal-scaling) - add more web server servers (it's also possible to add more DB instances)
+
+<p align="center">
+<img src="images/design/general/basic_architecture_db_web_solution.png"/>
+</p>
+</b></details>
 
 ### AWS Cloud
 
@@ -263,6 +309,7 @@ In other words, a content delivery network allows you to quickly transfer conten
 <details>
 <summary>Design the most basic architecture for a web application (server based) that tells a single user what time is it (no DB, no scaling, ...) with maximum of two components
 </summary><br><b>
+
 
 <p align="center">
 <img src="images/design/aws_cloud/what_time_is_it_1.png"/>
@@ -378,38 +425,9 @@ A different approach can be to use Cache + DB, where for each session, we'll che
 
 </b></details>
 
-
 ### Misc
 
-Note: The names of the exercises are quotes from movies (sometimes little bit modified). If you can guess from which movie, please submit it to movies.md file in this way: [QUOTE] [MOVIE] [YOUR NAME]<br>
-Another note: Exercises may repeat themselves in different variations to practice and emphasize different concepts.
-
-#### "Elementary, my dear Watson"
-
-<details>
-<summary>You have a website running on a single server. It's mostly running fine because only two users access it on weekly basis :'(<br>It suddenly becomes super popular and many users try to access it, but they are experiencing issues due to high load of the server. Two questions:
-  * What term/pattern in system design is referring to the issue you are experiencing?
-  * How can you deal with it (even if partially) WITHOUT adding more servers or changing the architecture?
-<p align="center">
-<img src="images/design/basic_architecture.png"/>
-</p>
-</summary><br><b>
-
-  * Scalability. Your web server doesn't scale based on demand (= the additional users accessing your website) hence they are experiencing issues.
-  * Apply `vertical scaling` which means, adding more resources to your server - more CPU, more RAM. This way, your architecture doesn't change, but your website is able to serve more users.
-</b></details>
-
-<details>
-<summary>Will 'vertical scaling' solve your scale issues permanently? Is it the optimal solution?</summary><br><b>
-
-It might solve your issue for limited time, but you can't solely rely on it.
-Vertical scaling has limitations. You can't keep adding RAM, storage and CPU endlessly. Eventually you'll hit some physical limit where for example, you simply don't have anymore space in your server box and you bought the best components you could.
-</b></details>
-
-<details>
-<summary>Assuming you now can extend the architecture, what would you change?</summary><br><b>
-</b></details>
-
+Note: Exercises may repeat themselves in different variations to practice and emphasize different concepts.
 #### "Perfectly balanced, as all things should be"
 
 <details>
@@ -634,7 +652,7 @@ Because you can't keep upgrading forever a certain server. At some point, you'll
 </b></details>
 
 <details>
-<summary>Once we perform "Horizonal Scaling", by for example adding multiple web servers instead of having one server, how do we handle client acess to these servers? </summary><br><b>
+<summary>Once we perform "Horizonal Scaling", by for example adding multiple web servers instead of having one server, how do we handle client access to these servers? </summary><br><b>
 
 Using a load balancer
 </b></details>
@@ -708,6 +726,15 @@ No, you can use a DNS server.
 One that supports sticky sessions so users returning to the website, would have their data loaded, in case the server don't use shared storage.
 </b></details>
 
+### Failover
+
+<details>
+<summary>Explain what is a "Failover". What does it happen?</summary><br><b>
+</b></details>
+
+<details>
+<summary>Explain "Cold Standby" failover strategy</summary><br><b>
+</b></details>
 ### Cache
 
 <details>
@@ -855,12 +882,6 @@ There many great resources out there to learn about system design in different w
 </details>
 
 ## System Designs
-
-### Cloud
-
-#### "What Is The Time" web application
-
-* Purpose: Let people know what is the time
 
 ### General Systems
 
@@ -1045,11 +1066,16 @@ User account:
 How to perform system design?
 TODO(abregman): this section is not yet ready
 
-1. Define which quality attributes are important for your system - scalability, efficiency, reliability, etc.
+1. Define clearly the requirements - if requirements are not clear, make sure to clarify them
+2. Answer the question what is the projected traffic?
+3. Define which quality attributes are important for your system - scalability, efficiency, reliability, etc.
+4. TODO
 
 ## System Design Interview Tips
 
-If you are here because you have a system design interview, here are a couple of suggestions
+If you are here because you have a system design interview, here are a couple of suggestions:
+
+* Choose the simplest architecture that captures the requirements (functional requirements but also expected traffic for example) of the system. No need to complicate things :)
 
 More specific suggestions based on the phase of the interview:
 
@@ -1084,6 +1110,8 @@ Note: You might want to ask yourself these questions also after you've done perf
 ## Credits
 
 <div>The icon in the banner made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+
+The icons used in "General" exercises section created by Arie Bregman
 
 ## Contributions
 
