@@ -13,14 +13,16 @@
 * [Questions](#Questions)
 * [Resources](#Resources)
 * [System Design](#system-designs)
-  * [Cloud](#cloud-system-design)
-  * [Real Systems](#real-systems-design)
+  * [Cloud](#system-design-cloud)
+  * [Development](#system-design-development)
+  * [Generic Systems](#system-design-generic-systems")
+  * [Real-World Systems](#system-design-real-world-systems")
 * [System Design Process](#system-design-process)
 * [Interview Tips](#system-design-interview-tips)
 * [Q&A](common-qa.md)
 * [Credits](credits.md)
 
-## Topics
+## System Design Concepts
 
 * [Requirements](#requirements)
   * [Functional Requirements](#functional-requirements)
@@ -38,6 +40,8 @@
     * [supra-linear scalability](#supra-linear-scalability)
     * [Negative scalability](#negative-scalability)
 * Availability
+* Reliability
+* Serviceability
 * Performance
 * Resiliency
 * Durability
@@ -49,7 +53,7 @@
   * Distributed Cache
   * Cache Policy (aka Replacement Policy)
     * LRU (least recently used)
-* Load Balancing
+* [Load Balancer](#load-balancing)
   * Consistent Hashing
   * Techniques
     * Round Robin
@@ -64,7 +68,7 @@
   * Sticky Sessions
   * Health Checks
 * Fault Tolerance
-* [Distributed System](#distributed-systems)
+* [Distributed Systems](#distributed-systems)
   * [Fallacies of distributed systems](#fallacies-of-distributed-systems)
   * [Clock Drift](#clock-drift)
 * Extensibility
@@ -85,13 +89,17 @@
   * Latency
   * Throughput
 * Databases
+  * Types
+    * SQL
+    * NoSQL
   * Sharding
-  * Read Replicas
+  * Replication
+    * Read Replicas
 * Design Level
   * Low level design
   * High level design
 
-## Topics Explained
+## Concepts Explained
 
 ### Requirements
 
@@ -141,20 +149,19 @@ Few examples:
 In simpler words, scalability is about answering the question whether a system or an architecture are able to scale in a way that meets the new workloads and demand.<br>
 More practically, answer questions like:
   * if a system runs a database, does it able to handle more queries?
-  * if a system runs a service that stream videos to million users. Will it able to stream them the same way if the amount of users would triple itself?
+  * if a system runs a service that streams videos to million of users. Will it able to stream them the same way if the amount of users would triple itself?
 
 Also, scaling can be performed on different components. For example, in most cloud environments scaling is supported in case of:
 
-  * Compute hosts
+  * Virtual Machines
   * Virtual network functions
-  * VMs/Instances
   * Containers
 
 There are different ways to scale.
 
 #### Vertical Scaling
 
-Adding additional resources to *the existing system/component/unit*. If we have a server, a vertical scaling might be done in one or more of the following ways:
+Vertical Scaling is about adding additional resources to *the existing system/component/unit*. If for example, we have a server, a vertical scaling might be done in one or more of the following ways:
 
   * Adding more RAM to the server
   * Adding more storage/disks
@@ -163,6 +170,14 @@ Adding additional resources to *the existing system/component/unit*. If we have 
 <p align="center">
 <img src="images/scalability/vertical_scaling.png"/>
 </p>
+
+##### Use Cases
+
+If you are looking for simple change, one that doesn't involves adding new components to your architecture and if your app/system has low traffic, then vertical scaling can be a great option
+
+##### Limits
+
+The limit of vertical scaling is clear - you are able to scale until your are no longer able to physically or virtually increase the resources of your machine.
 
 #### Horizontal Scaling
 
@@ -175,6 +190,8 @@ Few examples:
 <p align="center">
 <img src="images/scalability/horizontal_scaling.png"/>
 </p>
+
+Point to think about: now that you know about vertical scaling and horizontal scaling, which one would you perform if you can choose only one of them?
 
 #### Scalability Factor
 
@@ -206,6 +223,38 @@ It used to be done either automatically or manually. Today, especially in the er
 #### Cold Standby
 
 TODO
+
+### Load Balancer
+
+[Wikipedia](https://en.wikipedia.org/wiki/Load_balancing_(computing)): "In computing, load balancing refers to the process of distributing a set of tasks over a set of resources (computing units), with the aim of making their overall processing more efficient."
+
+Load balancer is a very important component in system design. You might already seen it mentioned in other sections like "horizontal scaling", so you understand that it's a very common component in many system designs.
+
+<p align="center">
+<img src="images/load_balancer/basic_architecture.png"/>
+</p>
+
+There a couple of things to remember about load balancers:
+
+  * Usually the IP address of the load balancer itself is public while the addresses of the instances/servers are private (there is no reason to allow users/clients to reach them directly and bypass the load balancer)
+  * There are multiple techniques/algorithms as to how to perform the load balancing itself
+
+### Availability
+
+[Wikipedia](https://en.wikipedia.org/wiki/Reliability,_availability_and_serviceability): "Availability means the probability that a system is operational at a given time, i.e. the amount of time a device is actually operating as the percentage of total time it should be operating. High-availability systems may report availability in terms of minutes or hours of downtime per year."
+
+In simpler words, the percentage of time a system, service or app is accessible, operational
+
+### Reliability
+
+[Wikipedia](https://en.wikipedia.org/wiki/Reliability,_availability_and_serviceability): "Reliability can be defined as the probability that a system will produce correct outputs up to some given time t.[5] Reliability is enhanced by features that help to avoid, detect and repair hardware faults. A reliable system does not silently continue and deliver results that include uncorrected corrupted data."
+
+Question: can you explain the difference between Availability and Reliability?
+
+### Serviceability
+
+[Wikipedia](https://en.wikipedia.org/wiki/Reliability,_availability_and_serviceability): "Serviceability or maintainability is the simplicity and speed with which a system can be repaired or maintained; if the time to repair a failed system increases, then availability will decrease."
+
 ### Networking
 
 #### Public IP
@@ -216,12 +265,12 @@ From system design perspective, when you have a resources or a component, you wo
 
 #### Private IP
 
-Whenever you don't want users to be  able to globally interact with a certain component or resource, you should use a private IP address. Few examples:
+Whenever you DON'T want users to be able to globally interact with a certain component or resource, you should use a private IP address. Few examples:
 
-  * Web servers that only the load balancer should communicate with them directly
-  * Internal servers that users outside the organization should access
+  * Web servers that only the load balancer should communicate with them directly and not the users/clients themselves
+  * Internal servers that users outside the organization shouldn't access
 
-Private IPs, as opposed to public IPs, don't have to be unique and each separate network, can use the same addresses.
+Private IPs, as opposed to public IPs, don't have to be unique and each separate network, can use the same addresses (because it's private :) )
 
 #### Latency
 
@@ -231,6 +280,26 @@ The time it takes to perform a certain task/action
 
 The number of tasks/actions per unit of time
 
+### Databases
+
+[Wikipedia](https://en.wikipedia.org/wiki/Database): "a database is an organized collection of data stored and accessed electronically from a computer system."
+
+Perhaps the most basic example for a database would be a file on filesystem. This file can store information on people and their addresses, it can contain information on types of wine, or any other organized data.
+
+Even though a file can be considered a database, you'll not find it used in system designs. Databases today are full and rich services that supports much more than just storing your data.
+
+#### Types
+
+##### SQL
+
+##### NoSQL
+
+#### Replication
+
+[Wikipedia](https://en.wikipedia.org/wiki/Replication_(computing)): "Replication in computing involves sharing information so as to ensure consistency between redundant resources, such as software or hardware components, to improve reliability, fault-tolerance, or accessibility."
+
+You'll see in many system designs that it's quite common to have separate instance for writes and another instance for reads. Thing is, when you split it into read and write instances, you have to make sure the data is consistent. This is where replication becomes relevant.
+
 ### DNS
 
 [Wikipedia](https://en.wikipedia.org/wiki/Domain_Name_System): "Most prominently, it translates more readily memorized domain names to the numerical IP addresses needed for locating and identifying computer services and devices with the underlying network protocols."
@@ -239,6 +308,15 @@ In other words, the most common use can of a DNS would be a address translation.
 In addition, a DNS can be used for load balancing, using the round robin technique.
 
 ### Distributed Systems
+
+#### What is a distributed system?
+
+* A group of computers/servers working together
+* The complexity of distributed system often hidden from the user
+
+<p align="center">
+<img src="images/distributed_systems/hidden_complexity.png"/>
+</p>
 
 #### Fallacies of distributed systems
 
@@ -321,10 +399,8 @@ In this case what you need is two components:
 * Elastic IP address - This is the static IP address our user will use every time to reach the application. In case the instance is not operational, we could always move the IP address to one that it is (if we manage more than one instance)
 </b></details>
 
-#### "What time is it?" but with more than one user
-
 <details>
-<summary>Following the last exercise, your web app became a huge success and many users start using it. What might be the problem with moving from one user to multiple users and how to deal with it using a single improvement of the architecture?
+<summary>Your web app became a huge success and many users start using it. What might be the problem with moving from one user to multiple users and how to deal with it using a single improvement of the architecture?
 </summary><br><b>
 
 Your instance might not be strong enough to handle requests from multiple users and soon enough you might see RAM and CPU utilized fully. One way to deal with it is, to perform what is called "Vertical Scaling" which is the act of adding more resources to your instance. In AWS case, switching to an instance type with more resources like M5 for example.
@@ -337,10 +413,8 @@ Note: The problem with vertical scaling (in case you have one node) is downtime 
 
 </b></details>
 
-#### "What time is it?" but without elastic IP addresses
-
 <details>
-<summary>Following the last two exercises, you would like to change the architecture offered in the solution, to not use elastic IP addresses for obvious reasons that it's not really scalable (each EC2 instance has a different IP and users are not able to remember them all). Offer an improvement
+<summary>You would like to change the architecture offered in the solution, to not use elastic IP addresses for obvious reasons that it's not really scalable (each EC2 instance has a different IP and users are not able to remember them all). Offer an improvement
 </summary><br><b>
 
 Instead of using elastic IP addresses we can add a record in the DNS, using the Route 53 service, to have a record from the type A. This way, all users will be able to access the app using an hostname and the IP address will be provided to them by the DNS
@@ -360,10 +434,8 @@ A more proper and complete architecture would be to use an ELB
 But even with ELB used and "Auto scaling group" for automatically scaling the nodes, this architecture is not optimal. Can you point what is the problem with current architecture? (from two different aspecs)
 </b></details>
 
-#### "What time is it?"  - Final Part
-
 <details>
-<summary>Following the last "What time is it?" exercise, state the issues with current architecture and what would you imrpove
+<summary>State the issues with current architecture and what would you imrpove
 
 <p align="center">
 <img src="images/design/aws_cloud/what_time_is_it_4.png"/>
@@ -403,7 +475,7 @@ There are a couple of solutions that can be applied in this case:
   * User cookies: the client/user stores the relevant data (shopping cart in this case) and in this case it doesn't matter with which EC2 instance the user interacts with, the data on the shopping cart will be sent from the client/user to the relevant instance. The disadvantages: HTTP requests are much heavier because data is attached with each request and it holds some security risks as cookies can be potentially modified
 </b></details>
 
-#### "Video Games Shop" - User Data
+#### "Video Games Shop"
 
 <details>
 <summary>Following the last exercise, is there another way to deal with user's data (short and long term) except user's cookies and sticky sessions?
@@ -428,6 +500,7 @@ A different approach can be to use Cache + DB, where for each session, we'll che
 ### Misc
 
 Note: Exercises may repeat themselves in different variations to practice and emphasize different concepts.
+
 #### "Perfectly balanced, as all things should be"
 
 <details>
@@ -443,7 +516,7 @@ Note: Exercises may repeat themselves in different variations to practice and em
 
 * How to improve:<br>
   <p align="center">
-  <img src="images/design/basic_architecture_with_load_balancer.png"/>
+  <img src="images/load_balancer/basic_architecture.png"/>
   </p>
 
 * Further limitations:
@@ -652,15 +725,27 @@ Because you can't keep upgrading forever a certain server. At some point, you'll
 </b></details>
 
 <details>
+<summary>If you can only choose to perform horizontal scaling or vertical scaling, but not both, which one would you perform?</summary><br><b>
+</b></details>
+
+<details>
 <summary>Once we perform "Horizonal Scaling", by for example adding multiple web servers instead of having one server, how do we handle client access to these servers? </summary><br><b>
 
 Using a load balancer
 </b></details>
 
+<details>
+<summary>Name one disadvantage and one advantage of vertical scaling over horizontal scaling</summary><br><b>
+
+Advantage: Simplicity. You increase the resources (maybe also restart something) but that's it, there is no architectural change. In horizontal scaling, you usually need to add a load balancer to distribute the traffic or access to the different nodes, which is considered an architectural change.
+
+Disadvantage: Redundancy. When performed solely on a single server, your architecture will still suffer from redundancy - when your single server is down, your entire application is down.
+</b></details>
+
 ### Load Balancer
 
 <details>
-<summary>Tell me everything you know about Load Balancers</summary><br><b>
+<summary>Why do we need load balancers?</summary><br><b>
 </b></details>
 
 <details>
@@ -678,7 +763,17 @@ Using a load balancer
 </b></details>
 
 <details>
-<summary>Do you neccesrialy need a dedicated load balancer instance to perform load balancing? (using the round robin technique for example)</summary><br><b>
+<summary>True or False? Usually, in basic architectures, the servers behind a load balancer are using private IPs while the load balancer itself is using a public IP</summary><br><b>
+
+True. This serves two purposes:
+
+  * We want everyone to use the load balancer :)
+  * It provides a better security, by not allowing everyone to reach the servers directly. This way, we can secure better one component rather taking care of the security of all the instances/servers behind the load balancer
+</b></details>
+
+<details>
+<summary>Do you necessarily need a dedicated load balancer instance to perform load balancing? (using the round robin technique for example)</summary><br><b>
+
 No, you can use a DNS server.
 </b></details>
 
@@ -792,6 +887,16 @@ So basically the latency of L2 cache reference is 14x L1 cache reference.
 <summary>What is CDN?</summary><br><b>
 </b></details>
 
+### Databases
+
+<details>
+<summary>What are the advantages of replicating a database?</summary><br><b>
+
+* Introducing high-availability: when creating a replication, you actually create another source of data you can use, even when your original instance is down
+* Performances are better spread: you can decide that one of the instances is for reads while the other one is for reads
+* Your app becomes more reliable: even if your database is down, the replication can still be used
+</b></details>
+
 ### Misc
 
 <details>
@@ -845,6 +950,7 @@ There many great resources out there to learn about system design in different w
 
 #### Videos
 * [Harvard Scalability Lecture - 2012](https://www.youtube.com/watch?v=-W9F__D3oY4&ab_channel=JorgeScott)
+
 #### Repositories
 * [awesome-scalability](https://github.com/binhnguyennus/awesome-scalability) - "An updated and organized reading list for illustrating the patterns of scalable, reliable, and performant large-scale systems"
 </details>
@@ -885,6 +991,57 @@ There many great resources out there to learn about system design in different w
 
 ### General Systems
 
+<a id="system-design-development"></a>
+### System Design - Development
+
+This section focusing on the development aspect of system design (e.g. Version Control, Development Environment, etc.).
+Note: it might overlap with other sections such 'Cloud System Design'.
+
+For each scenario try to identify the following:
+
+  * Problem Statement & Analysis
+  * Solution(s)
+
+#### Big-Scale Monorepo
+
+You are part of a team which owns a Git monorepo. Recently this monorepo grown quite a lot and now includes hundred thousands of files. Recently, developers in your team complain it takes a lot of time to run some Git commands, especially those related to filesystem state (e.g. `git status` takes a couple of seconds or even minutes). What would you suggest the team to do?
+
+##### Big-Scale Monorepo - Problem Statement & Analysis
+
+Let's start with stating the facts:
+  * The repo has grown to include million of files
+  * It takes seconds or minutes to run Git operations while usually it takes approximately 1-2 seconds at most
+
+Next, it would be good to understand how exactly these different commands work in order to understand what we can do about the problem.
+In case of `git status`, it runs diffs on HEAD and the index and also the index and `working directory`, to understand what is being tracked and what's not. This results in running lstat() system call which returns a struct on each file (including information like device ID, permissions, inode number, timestamp info, etc.). Running this on hundred thousands of files takes time, which explains why `git status` takes seconds, if not minutes, to run.
+
+##### Big-Scale Monorepo - Solution(s)
+
+The solution should be focusing on how Git can perform less work in regards to its operations. In this case it's very technology specific, but there is always something to learn, even in specific implementations, on the general design approach.
+
+1. Use the built-in `fsmonitor` (filesystem monitor) of Git. With fsmonitor (which integrated with Watchman), Git spawn a daemon that will watch for any changes continuously in the working directory of your repository and will cache them . This way, when you run `git status` instead of scanning the working directory, you are using a cached state of your index.
+
+<p align="center">
+<img src="images/design/development/git_fsmonitor.png"/>
+</p>
+
+2. Enable `feature.manyFile` with `git config feature.manyFiles true`. This does two things:
+
+  1. Sets `index.version = 4` which enables path-prefix compression in the index
+  2. Sets `core.untrackedCache=true` which by default is set to `keep`. The untracked cache is quite important concept. What it does is to record the mtime of all the files and directories in the working directory. This way, when time comes to iterate over all the files and directories, it can skip those whom mtime wasn't updated.
+
+Before enabling it, you might want to run `git update-index --test-untracked-cache` to test it out and make sure mtime operational on your system.
+
+3. Git also has the built-in `git-maintainence` command which optimizes Git repository so it's faster to run commands like `git add` or `git fatch` and also, the git repository takes less disk space. It's recommended to run this command periodically (e.g. each day).
+
+4. Track only what is used/modified by developers - some repositories may include generated files that are required for the project to run properly (or support certain accessibility options), but not actually being modified by any way by the developers. In that case, tracking them is futile.
+In order to avoid populating those file in the working directory, one can use the `sparse checkout` feature of Git.
+
+5. Finally, with certain build systems, you can know which files are being used/relevant exactly based on the component of the project that the developer is focusing on. This, together with the `sparse checkout` can lead to a situation where only a small subset of the files are being populated in the working directory. Making commands like `git add`, `git status`, etc. really quick
+
+<a id="system-design-generic-systems"></a>
+### System Design - Generic Systems
+
 This section covers system designs of different types of applications. Nothing too specific, but yet quite common in the real world as a type of application.
 
 For each type of application we are going to mention its:
@@ -904,7 +1061,7 @@ With flat rate based on vehicle type and time
 
 Note: if you've been told to design this type of system without any other requirements, the rate and special parking, is something you should ask about.
 
-#### Payment and Reservation System for Parking Garages - Clarifications
+##### Payment and Reservation System for Parking Garages - Clarifications
 
 Ask clarifying questions such as:
 
@@ -913,14 +1070,14 @@ Ask clarifying questions such as:
   * How much data do we expect the system to handle?
     * How many requests per second?
 
-#### Payment and Reservation System for Parking Garages - Requirements
+##### Payment and Reservation System for Parking Garages - Requirements
 
 * User to be able to reserve a parking spot and receive a ticket
 * User can't reserve a parking spot reserved by someone else
 * System to support the following types of vehicles: regular, large and compact
 * System to support flat rate based on vehicle type and time the vehicle spent in the parking
 
-#### Payment and Reservation System for Parking Garages - API (Public Endpoints)
+##### Payment and Reservation System for Parking Garages - API (Public Endpoints)
 
 * `/reserve`
   * Parameters: garage_id, start_time, end_time
@@ -933,7 +1090,7 @@ Ask clarifying questions such as:
   * Parameters: reservation_id
   * Use existing API like Squre, PayPal, Stripe, etc.
 
-#### Payment and Reservation System for Parking Garages - API (Internal Endpoints)
+##### Payment and Reservation System for Parking Garages - API (Internal Endpoints)
 
 * `/calculate_payment` - calculate the payment for reserving a parking spot
   * Parameters: reservation_id
@@ -950,12 +1107,12 @@ Ask clarifying questions such as:
 * `/login`
   * Parameters: email, username (optional), password
 
-#### Payment and Reservation System for Parking Garages - Scale
+##### Payment and Reservation System for Parking Garages - Scale
 
 We can assume that the number of users is limited to the number of parking spots in each garage and taking into account the number of garages of course.<br>
 Given that, users scale is pretty predictable and can't reach unexpected count (assuming no new garages can be added or fixed rate of new garages being added)
 
-#### Payment and Reservation System for Parking Garages - Data Scheme
+##### Payment and Reservation System for Parking Garages - Data Scheme
 
 SQL based database with the following tables
 
@@ -1005,13 +1162,14 @@ Vehicles
 | license      | varchar             |
 | type         | enum                |
 
-#### Payment and Reservation System for Parking Garages - High-level architecture
+##### Payment and Reservation System for Parking Garages - High-level architecture
 
 <p align="center">
 <img src="images/design/apps/garage_payment_and_reservation/high_level_architecture.png"/>
 </p>
 
-### Real Systems
+<a id="system-design-real-world-systems"></a>
+### System Design - Real-World Systems
 
 This section covers system designs of real world applications.
 
