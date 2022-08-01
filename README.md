@@ -4,6 +4,8 @@
 
 > A curated collection of resources and exercises to help you learn about system design
 
+**NOTE:** The work on this repo is still in progress. Some information might be lacking or missing at this point.
+
 * [Topics](#topics)
 * [Topics Explained](#topics-explained)
 * [Exercises](#exercises)
@@ -22,14 +24,61 @@
 * [Q&A](common-qa.md)
 * [Credits](credits.md)
 
-## System Design Concepts
+## System Design
+
+### Basic Architecture
+
+<!-- ALL-TOPICS-LIST:START -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<center>
+<table>
+  <tr>
+    <td align="center"><a href="basic_architecture/README.md"><img src="images/basic_architecture/server.png" width="150px;" height="50px;" alt="Server" /><br /><b>Server</b></a></td>
+    <td align="center"><a href="basic_architecture/README.md"><img src="images/basic_architecture/client.png" width="100px;" height="100px;" alt="Client" /><br /><b>Client</b></a></td>
+  </tr>
+</table>
+</center>
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-TOPICS-LIST:END -->
+
+### Services
+<!-- ALL-TOPICS-LIST:START -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<center>
+<table>
+  <tr>
+    <td align="center"><a href="services/load_balancer/README.md"><img src="images/services/load_balancer.png" width="75px;" height="75px;" alt="Load Balancer" /><br /><b>Load Balancer</b></a></td>
+    <td align="center"><a href="services/api_gateway/README.md"><img src="images/services/api_gateway.png" width="75px;" height="75px;" alt="API Gateway" /><br /><b>API Gateway</b></a></td>
+  </tr>
+</table>
+</center>
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-TOPICS-LIST:END -->
+
+### Database
+<!-- ALL-TOPICS-LIST:START -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<center>
+<table>
+  <tr>
+    <td align="center"><a href="databases/README.md"><img src="images/databases/database.png" width="70px;" height="75px;" alt="Databases" /><br /><b>Databases</b></a></td>
+  </tr>
+</table>
+</center>
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-TOPICS-LIST:END -->
 
 * [Requirements](#requirements)
   * [Functional Requirements](#functional-requirements)
   * [Non-Functional Requirements](#non-functional-requirements)
 * [Basic architecture](#basic-architecture)
   * [Client](#Client)
-  * [Server](#Server)
   * Dispatcher
 * [Scalability](#scalability)
   * [Vertical Scaling](#vertical-scaling)
@@ -53,22 +102,6 @@
   * Distributed Cache
   * Cache Policy (aka Replacement Policy)
     * LRU (least recently used)
-* [Components](#components)
-  * [API Gateway](#api-gateway)
-  * [Load Balancer](#load-balancing)
-    * Consistent Hashing
-    * Techniques
-      * Round Robin
-      * Weighted Round Robin
-      * Least Connection
-      * Weighted Least Connection
-      * Resource Based
-      * Fixed Weighting
-      * Weighted Response Time
-      * Source IP Hash
-      * URL Hash
-    * Sticky Sessions
-    * Health Checks
 * Fault Tolerance
 * [Distributed Systems](#distributed-systems)
   * [Fallacies of distributed systems](#fallacies-of-distributed-systems)
@@ -90,13 +123,6 @@
     * [Public IP](#public-ip)
   * Latency
   * Throughput
-* Databases
-  * Types
-    * SQL
-    * NoSQL
-  * Sharding
-  * Replication
-    * Read Replicas
 * Design Level
   * Low level design
   * High level design
@@ -119,30 +145,6 @@ Non-functional requirements focus on how the system performs, especially in gene
 While such requirements might affect user's experience they shouldn't affect specific functionality or features the system supports.
 
 For example, if a system is a type of a service, a non-functional requirement might be "zero downtime" or "No loss of data".
-
-### Basic Architecture
-
-#### Client
-
-A client refers to a software or hardware accessing a resource or a service that is served by a server.
-While in some cases the server and the client might be on the same system/host, in most cases they will be on separate systems.
-
-Examples for clients:
-
-* A Web browser that is used by a user to access a certain web page
-* A mobile phone that is used by the user to read emails
-
-<p align="center">
-<img src="images/design/basic_architecture.png"/>
-</p>
-
-#### Server
-
-A server, similarly to a client, can be a software or hardware, but as opposed to a client, its role is to serve the client. It can be by providing a certain resource to the client or let it use a service that is running on the server.
-Few examples:
-
-* A system that stores files and allow the user to access or download them
-* A system that runs a service which allows users to listen to music
 
 ### Scalability
 
@@ -225,36 +227,6 @@ It used to be done either automatically or manually. Today, especially in the er
 #### Cold Standby
 
 TODO
-
-### Components
-
-#### API Gateway
-
-With the transition from monolith to microservices architecture, clients suddenly had to contact many different services and each service had to apply the very same methods of monitoring, logging and security.
-
-To handle with this situation, the API Gateway was invented. An API management component that sits between the clients and the different services/APIs.
-
-Advantages:
-  * Reducing round trips: client performance is better as the client doesn't have to contact all the different services/APIs. This is done by the API gateway itself so the client has only to contact the API gateway.
-  * Protocol Switching: The client can use one type of protocol to communicate with the API gateway, while the API gateway will use another protocol to communicate with the services (e.g. client is using HTTPS while API gateway uses HTTP)
-  * Offload Functionality: Many times you'll see that some of the services/APIs functionalities are moving to the API gateway itself like rate limiting, API logging, etc.  this allows the services to focus solely on the functionality they need to provide.
-  * Security: Instead of having all the APIs open and available for everyone, it can be available only to the API gateway and security can be applied on the API gateway so everyone contacting the different service go through the same security measurements in one consolidated component
-
-#### Load Balancer
-
-[Wikipedia](https://en.wikipedia.org/wiki/Load_balancing_(computing)): "In computing, load balancing refers to the process of distributing a set of tasks over a set of resources (computing units), with the aim of making their overall processing more efficient."
-
-Load balancer is a very important component in system design. You might already seen it mentioned in other sections like "horizontal scaling", so you understand that it's a very common component in many system designs.
-
-<p align="center">
-<img src="images/load_balancer/basic_architecture.png"/>
-</p>
-
-There a couple of things to remember about load balancers:
-
-  * Usually the IP address of the load balancer itself is public while the addresses of the instances/servers are private (there is no reason to allow users/clients to reach them directly and bypass the load balancer)
-  * There are multiple techniques/algorithms as to how to perform the load balancing itself
-
 ### Availability
 
 [Wikipedia](https://en.wikipedia.org/wiki/Reliability,_availability_and_serviceability): "Availability means the probability that a system is operational at a given time, i.e. the amount of time a device is actually operating as the percentage of total time it should be operating. High-availability systems may report availability in terms of minutes or hours of downtime per year."
@@ -296,25 +268,7 @@ The time it takes to perform a certain task/action
 
 The number of tasks/actions per unit of time
 
-### Databases
 
-[Wikipedia](https://en.wikipedia.org/wiki/Database): "a database is an organized collection of data stored and accessed electronically from a computer system."
-
-Perhaps the most basic example for a database would be a file on filesystem. This file can store information on people and their addresses, it can contain information on types of wine, or any other organized data.
-
-Even though a file can be considered a database, you'll not find it used in system designs. Databases today are full and rich services that supports much more than just storing your data.
-
-#### Types
-
-##### SQL
-
-##### NoSQL
-
-#### Replication
-
-[Wikipedia](https://en.wikipedia.org/wiki/Replication_(computing)): "Replication in computing involves sharing information so as to ensure consistency between redundant resources, such as software or hardware components, to improve reliability, fault-tolerance, or accessibility."
-
-You'll see in many system designs that it's quite common to have separate instance for writes and another instance for reads. Thing is, when you split it into read and write instances, you have to make sure the data is consistent. This is where replication becomes relevant.
 
 ### DNS
 
@@ -758,102 +712,7 @@ Advantage: Simplicity. You increase the resources (maybe also restart something)
 Disadvantage: Redundancy. When performed solely on a single server, your architecture will still suffer from redundancy - when your single server is down, your entire application is down.
 </b></details>
 
-### Load Balancer
 
-<details>
-<summary>Why do we need load balancers?</summary><br><b>
-</b></details>
-
-<details>
-<summary>What load balancing techniques are there?</summary><br><b>
-
-  * Round Robin
-  * Weighted Round Robin
-  * Least Connection
-  * Weighted Least Connection
-  * Resource Based
-  * Fixed Weighting
-  * Weighted Response Time
-  * Source IP Hash
-  * URL Hash
-</b></details>
-
-<details>
-<summary>True or False? Usually, in basic architectures, the servers behind a load balancer are using private IPs while the load balancer itself is using a public IP</summary><br><b>
-
-True. This serves two purposes:
-
-  * We want everyone to use the load balancer :)
-  * It provides a better security, by not allowing everyone to reach the servers directly. This way, we can secure better one component rather taking care of the security of all the instances/servers behind the load balancer
-</b></details>
-
-<details>
-<summary>Do you necessarily need a dedicated load balancer instance to perform load balancing? (using the round robin technique for example)</summary><br><b>
-
-No, you can use a DNS server.
-</b></details>
-
-<details>
-<summary>What is an application load balancer?</summary><br><b>
-</b></details>
-
-<details>
-<summary>At what layers a load balancer can operate?</summary><br><b>
-</b></details>
-
-<details>
-<summary>What is DNS load balancing?</summary><br><b>
-</b></details>
-
-<details>
-<summary>What are the drawbacks of round robin algorithm in load balancing?</summary><br><b>
-
-  * A simple round robin algorithm knows nothing about the load and the spec of each server it forwards the requests to. It is possible, that multiple heavy workloads requests will get to the same server while other servers will got only lightweight requests which will result in one server doing most of the work, maybe even crashing at some point because it unable to handle all the heavy workloads requests by its own.
-  * Each request from the client creates a whole new session. This might be a problem for certain scenarios where you would like to perform multiple operations where the server has to know about the result of operation so basically, being sort of aware of the history it has with the client. In round robin, first request might hit server X, while second request might hit server Y and ask to continue processing the data that was processed on server X already.
-</b></details>
-
-<details>
-<summary>What are sticky sessions? What are their pros and cons?</summary><br><b>
-</b></details>
-
-<details>
-<summary>Explain each of the following load balancing techniques
-
-  * Round Robin
-  * Weighted Round Robin
-  * Least Connection
-  * Weighted Least Connection
-  * Resource Based
-  * Fixed Weighting
-  * Weighted Response Time
-  * Source IP Hash
-  * URL Hash
-</summary><br><b>
-</b></details>
-
-<details>
-<summary>Which load balancing technique would you use for e-commerce website? Why?</summary><br><b>
-
-One that supports sticky sessions so users returning to the website, would have their data loaded, in case the server don't use shared storage.
-</b></details>
-
-### API Gateway
-
-<details>
-<summary>Explain what is an API Gateway. Why it was invented</summary><br><b>
-
-Read [here](#api-gateway) about API Gateway
-</b></details>
-
-<details>
-<summary>Name three advantages of using API gateway</summary><br><b>
-
-* Security: everyone access the different services through one component which can be secured
-* Better client performances: less round trips to perform for clients to communicate with the different services
-* Offload functionalities from services into one place: insead of each service implementing things like rate limiting, logging, ... it can all be implemented in API gateway and applied for multiple services as well as new services added in the future
-
-For more details read [here](#api-gateway) about API Gateway
-</b></details>
 
 ### Failover
 
@@ -919,16 +778,6 @@ So basically the latency of L2 cache reference is 14x L1 cache reference.
 
 <details>
 <summary>What is CDN?</summary><br><b>
-</b></details>
-
-### Databases
-
-<details>
-<summary>What are the advantages of replicating a database?</summary><br><b>
-
-* Introducing high-availability: when creating a replication, you actually create another source of data you can use, even when your original instance is down
-* Performances are better spread: you can decide that one of the instances is for reads while the other one is for reads
-* Your app becomes more reliable: even if your database is down, the replication can still be used
 </b></details>
 
 ### Misc
