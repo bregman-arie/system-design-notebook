@@ -34,8 +34,40 @@
 <center>
 <table>
   <tr>
-    <td align="center"><a href="basic_architecture/README.md"><img src="images/basic_architecture/server.png" width="150px;" height="50px;" alt="Server" /><br /><b>Server</b></a></td>
+    <td align="center"><a href="basic_architecture/README.md"><img src="images/basic_architecture/server.png" width="120px;" height="40px;" alt="Server" /><br /><b>Server</b></a></td>
     <td align="center"><a href="basic_architecture/README.md"><img src="images/basic_architecture/client.png" width="100px;" height="100px;" alt="Client" /><br /><b>Client</b></a></td>
+  </tr>
+</table>
+</center>
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-TOPICS-LIST:END -->
+
+### Scalability
+<!-- ALL-TOPICS-LIST:START -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<center>
+<table>
+  <tr>
+    <td align="center"><a href="scalability/README.md"><img src="images/scalability/scalability.png" width="70px;" height="75px;" alt="Scalability" /><br /><b>Scalability</b></a></td>
+    <td align="center"><a href="scalability/README.md#horizontal-scaling"><img src="images/scalability/horizontal_scaling_icon.png" width="300px;" height="75px;" alt="Horizontal Scaling" /><br /><b>Horizontal Scaling</b></a></td>
+    <td align="center"><a href="scalability/README.md"><img src="images/scalability/vertical_scaling_icon.png" width="300px;" height="60px;" alt="Vertical Scaling" /><br /><b>Vertical Scaling</b></a></td>
+  </tr>
+</table>
+</center>
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-TOPICS-LIST:END -->
+
+### Reliability Engineering
+<!-- ALL-TOPICS-LIST:START -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<center>
+<table>
+  <tr>
+    <td align="center"><a href="reliability_engineering/README.md"><img src="images/reliability_engineering/availability.png" width="70px;" height="75px;" alt="Availability" /><br /><b>Availability</b></a></td>
   </tr>
 </table>
 </center>
@@ -52,6 +84,21 @@
   <tr>
     <td align="center"><a href="services/load_balancer/README.md"><img src="images/services/load_balancer.png" width="75px;" height="75px;" alt="Load Balancer" /><br /><b>Load Balancer</b></a></td>
     <td align="center"><a href="services/api_gateway/README.md"><img src="images/services/api_gateway.png" width="75px;" height="75px;" alt="API Gateway" /><br /><b>API Gateway</b></a></td>
+  </tr>
+</table>
+</center>
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-TOPICS-LIST:END -->
+
+### Networking
+<!-- ALL-TOPICS-LIST:START -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<center>
+<table>
+  <tr>
+    <td align="center"><a href="networking/README.md"><img src="images/networking/networking.png" width="70px;" height="75px;" alt="Networking" /><br /><b>Networking</b></a></td>
   </tr>
 </table>
 </center>
@@ -88,7 +135,6 @@
     * [Sub-linear scalability](#sub-linear-scalability)
     * [supra-linear scalability](#supra-linear-scalability)
     * [Negative scalability](#negative-scalability)
-* Availability
 * Reliability
 * Serviceability
 * Performance
@@ -116,13 +162,6 @@
     * Records
       * TTL
     * TLD and SLD
-* [Networking](#networking)
-  * Bandwidth
-  * IP
-    * [Private IP](#private-ip)
-    * [Public IP](#public-ip)
-  * Latency
-  * Throughput
 * Design Level
   * Low level design
   * High level design
@@ -146,77 +185,7 @@ While such requirements might affect user's experience they shouldn't affect spe
 
 For example, if a system is a type of a service, a non-functional requirement might be "zero downtime" or "No loss of data".
 
-### Scalability
 
-[Wikipedia](https://en.wikipedia.org/wiki/Scalability): "Scalability is the property of a system to handle a growing amount of work by adding resources to the system"
-
-In simpler words, scalability is about answering the question whether a system or an architecture are able to scale in a way that meets the new workloads and demand.<br>
-More practically, answer questions like:
-  * if a system runs a database, does it able to handle more queries?
-  * if a system runs a service that streams videos to million of users. Will it able to stream them the same way if the amount of users would triple itself?
-
-Also, scaling can be performed on different components. For example, in most cloud environments scaling is supported in case of:
-
-  * Virtual Machines
-  * Virtual network functions
-  * Containers
-
-There are different ways to scale.
-
-#### Vertical Scaling
-
-Vertical Scaling is about adding additional resources to *the existing system/component/unit*. If for example, we have a server, a vertical scaling might be done in one or more of the following ways:
-
-  * Adding more RAM to the server
-  * Adding more storage/disks
-  * Adding CPUs
-
-<p align="center">
-<img src="images/scalability/vertical_scaling.png"/>
-</p>
-
-##### Use Cases
-
-If you are looking for simple change, one that doesn't involves adding new components to your architecture and if your app/system has low traffic, then vertical scaling can be a great option
-
-##### Limits
-
-The limit of vertical scaling is clear - you are able to scale until your are no longer able to physically or virtually increase the resources of your machine.
-
-#### Horizontal Scaling
-
-Adding more systems/units/components but at the same time, make them work together so it would seems to the client as if there is one system it interacts with.<br>
-Few examples:
-
- * Instead of one web server, having two web servers with one load balancer balancing the traffic between them
- * Instead of one database server, having two databases
-
-<p align="center">
-<img src="images/scalability/horizontal_scaling.png"/>
-</p>
-
-Point to think about: now that you know about vertical scaling and horizontal scaling, which one would you perform if you can choose only one of them?
-
-#### Scalability Factor
-
-When you double the resources of your system (or design) you might expect your system to be able to handle double the workload as well, right? But this is not necessarily what will happen. Scalability factor is the term used to describe the workload your system is able to handle as a result of scaling your resources.
-
-##### Linear Scalability
-
-Linear Scalability happens when the workloads your system is able to handle scale accordingly to the scale in resources. The scalability factor remains constant as you scale.<br>
-For example, you triple the resources of your system -> the system is able to handle triple the workloads. In reality, it's actually not the case most of the time.
-
-##### Sub-Linear Scalability
-
-A more realistic outcome of scaling systems would be that some resources or component may not scale as expected (or as other resources and components). So doubling the resources will actually lead to an improvement of only x1.5 in workloads handling. In this case the scalability factor will be lower than 1.0
-
-##### Supra-Linear Scalability
-
-This is the optimal outcome. You triple the workloads handling by "only" doubling your resources for example. In other words, the ratio in performance change is bigger than the ratio in scaling changes (e.g. adding more CPUs). A scalability factor in this case, is bigger than 1.0
-
-##### Negative Scalability
-
-It may sound crazy, but in some cases, scaling your system might actually lead to worse results and that's exactly what negative scalability is all about. Scalability factor is below 0.
 
 ### Failover
 
@@ -227,11 +196,6 @@ It used to be done either automatically or manually. Today, especially in the er
 #### Cold Standby
 
 TODO
-### Availability
-
-[Wikipedia](https://en.wikipedia.org/wiki/Reliability,_availability_and_serviceability): "Availability means the probability that a system is operational at a given time, i.e. the amount of time a device is actually operating as the percentage of total time it should be operating. High-availability systems may report availability in terms of minutes or hours of downtime per year."
-
-In simpler words, the percentage of time a system, service or app is accessible, operational
 
 ### Reliability
 
@@ -242,32 +206,6 @@ Question: can you explain the difference between Availability and Reliability?
 ### Serviceability
 
 [Wikipedia](https://en.wikipedia.org/wiki/Reliability,_availability_and_serviceability): "Serviceability or maintainability is the simplicity and speed with which a system can be repaired or maintained; if the time to repair a failed system increases, then availability will decrease."
-
-### Networking
-
-#### Public IP
-
-[Wikipedia](): "A public IP address, in common parlance, is a globally routable unicast IP address, meaning that the address is not an address reserved for use in private networks"
-
-From system design perspective, when you have a resources or a component, you would like everyone to be able to access to, whether for direct communication (like a web server) or as a gateway for other components (like a load balancer), you should use a public IP
-
-#### Private IP
-
-Whenever you DON'T want users to be able to globally interact with a certain component or resource, you should use a private IP address. Few examples:
-
-  * Web servers that only the load balancer should communicate with them directly and not the users/clients themselves
-  * Internal servers that users outside the organization shouldn't access
-
-Private IPs, as opposed to public IPs, don't have to be unique and each separate network, can use the same addresses (because it's private :) )
-
-#### Latency
-
-The time it takes to perform a certain task/action
-
-#### Throughput
-
-The number of tasks/actions per unit of time
-
 
 
 ### DNS
@@ -670,49 +608,6 @@ In order to avoid such issues, the web server has to scale based on the usage. M
 When there are less users accessing the website, scale down.
 </b></details>
 
-### Scalability
-
-<details>
-<summary>Explain Scalability</summary><br><b>
-</b></details>
-
-<details>
-<summary>Explain "Vertical Scaling" and give an example where it can help to solve an issue</summary><br><b>
-
-Vertical scaling is the act of adding
-
-For example, you have a website which serve a class of 20 students. Suddenly, you are teaching multiple classes and your website has to service 40 students. In order to be able to do that, you might have to apply "vertical scaling" and add resources like RAM and CPU to the server running your website.
-</b></details>
-
-<details>
-<summary>Why we can't usually rely solely on "vertical scaling" to solve scaling issues?</summary><br><b>
-
-Because you can't keep upgrading forever a certain server. At some point, you'll hit limitations of buying the best components you could and not having additional space for more components. Maybe the best RAM you could buy is 10TB, but you actually need 19TB RAM to serve all the users.
-</b></details>
-
-<details>
-<summary>What is "Horizontal Scaling"?</summary><br><b>
-</b></details>
-
-<details>
-<summary>If you can only choose to perform horizontal scaling or vertical scaling, but not both, which one would you perform?</summary><br><b>
-</b></details>
-
-<details>
-<summary>Once we perform "Horizonal Scaling", by for example adding multiple web servers instead of having one server, how do we handle client access to these servers? </summary><br><b>
-
-Using a load balancer
-</b></details>
-
-<details>
-<summary>Name one disadvantage and one advantage of vertical scaling over horizontal scaling</summary><br><b>
-
-Advantage: Simplicity. You increase the resources (maybe also restart something) but that's it, there is no architectural change. In horizontal scaling, you usually need to add a load balancer to distribute the traffic or access to the different nodes, which is considered an architectural change.
-
-Disadvantage: Redundancy. When performed solely on a single server, your architecture will still suffer from redundancy - when your single server is down, your entire application is down.
-</b></details>
-
-
 
 ### Failover
 
@@ -735,28 +630,6 @@ Disadvantage: Redundancy. When performed solely on a single server, your archite
 False. If your server doesn't have to execute the request since the result is already in the cache, then it's actually the opposite - there is less load on the server in addition to reduced load times.
 </b></details>
 
-### Networking
-
-<details>
-<summary>What is a public IP? In which scenarios, one should use a public IP?</summary><br><b>
-</b></details>
-
-<details>
-<summary>What is a private IP? In which scenarios, one should use a private IP?</summary><br><b>
-</b></details>
-
-<details>
-<summary>What is latency?</summary><br><b>
-</b></details>
-
-<details>
-<summary>What is latency of L1 cache reference vs. L2 cache reference?</summary><br><b>
-
-L1 cache reference latency is 0.5 nanosecond
-L2 cache reference latency is 7 nanosecond
-
-So basically the latency of L2 cache reference is 14x L1 cache reference.
-</b></details>
 
 ### DNS
 
@@ -1182,7 +1055,7 @@ Note: You might want to ask yourself these questions also after you've done perf
 
 <div>The icon in the banner made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 
-The icons used in "General" exercises section created by Arie Bregman
+The icons used in "General" exercises section and the system design index, created by Arie Bregman
 
 ## Contributions
 
