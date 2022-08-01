@@ -15,8 +15,8 @@
 * [System Design](#system-designs)
   * [Cloud](#system-design-cloud)
   * [Development](#system-design-development)
-  * [Generic Systems](#system-design-generic-systems")
-  * [Real-World Systems](#system-design-real-world-systems")
+  * [Generic Systems](#system-design-generic-systems)
+  * [Real-World Systems](#system-design-real-world-systems)
 * [System Design Process](#system-design-process)
 * [Interview Tips](#system-design-interview-tips)
 * [Q&A](common-qa.md)
@@ -53,20 +53,22 @@
   * Distributed Cache
   * Cache Policy (aka Replacement Policy)
     * LRU (least recently used)
-* [Load Balancer](#load-balancing)
-  * Consistent Hashing
-  * Techniques
-    * Round Robin
-    * Weighted Round Robin
-    * Least Connection
-    * Weighted Least Connection
-    * Resource Based
-    * Fixed Weighting
-    * Weighted Response Time
-    * Source IP Hash
-    * URL Hash
-  * Sticky Sessions
-  * Health Checks
+* [Components](#components)
+  * [API Gateway](#api-gateway)
+  * [Load Balancer](#load-balancing)
+    * Consistent Hashing
+    * Techniques
+      * Round Robin
+      * Weighted Round Robin
+      * Least Connection
+      * Weighted Least Connection
+      * Resource Based
+      * Fixed Weighting
+      * Weighted Response Time
+      * Source IP Hash
+      * URL Hash
+    * Sticky Sessions
+    * Health Checks
 * Fault Tolerance
 * [Distributed Systems](#distributed-systems)
   * [Fallacies of distributed systems](#fallacies-of-distributed-systems)
@@ -224,7 +226,21 @@ It used to be done either automatically or manually. Today, especially in the er
 
 TODO
 
-### Load Balancer
+### Components
+
+#### API Gateway
+
+With the transition from monolith to microservices architecture, clients suddenly had to contact many different services and each service had to apply the very same methods of monitoring, logging and security.
+
+To handle with this situation, the API Gateway was invented. An API management component that sits between the clients and the different services/APIs.
+
+Advantages:
+  * Reducing round trips: client performance is better as the client doesn't have to contact all the different services/APIs. This is done by the API gateway itself so the client has only to contact the API gateway.
+  * Protocol Switching: The client can use one type of protocol to communicate with the API gateway, while the API gateway will use another protocol to communicate with the services (e.g. client is using HTTPS while API gateway uses HTTP)
+  * Offload Functionality: Many times you'll see that some of the services/APIs functionalities are moving to the API gateway itself like rate limiting, API logging, etc.  this allows the services to focus solely on the functionality they need to provide.
+  * Security: Instead of having all the APIs open and available for everyone, it can be available only to the API gateway and security can be applied on the API gateway so everyone contacting the different service go through the same security measurements in one consolidated component
+
+#### Load Balancer
 
 [Wikipedia](https://en.wikipedia.org/wiki/Load_balancing_(computing)): "In computing, load balancing refers to the process of distributing a set of tasks over a set of resources (computing units), with the aim of making their overall processing more efficient."
 
@@ -821,6 +837,24 @@ No, you can use a DNS server.
 One that supports sticky sessions so users returning to the website, would have their data loaded, in case the server don't use shared storage.
 </b></details>
 
+### API Gateway
+
+<details>
+<summary>Explain what is an API Gateway. Why it was invented</summary><br><b>
+
+Read [here](#api-gateway) about API Gateway
+</b></details>
+
+<details>
+<summary>Name three advantages of using API gateway</summary><br><b>
+
+* Security: everyone access the different services through one component which can be secured
+* Better client performances: less round trips to perform for clients to communicate with the different services
+* Offload functionalities from services into one place: insead of each service implementing things like rate limiting, logging, ... it can all be implemented in API gateway and applied for multiple services as well as new services added in the future
+
+For more details read [here](#api-gateway) about API Gateway
+</b></details>
+
 ### Failover
 
 <details>
@@ -989,10 +1023,8 @@ There many great resources out there to learn about system design in different w
 
 ## System Designs
 
-### General Systems
-
 <a id="system-design-development"></a>
-### System Design - Development
+### Development
 
 This section focusing on the development aspect of system design (e.g. Version Control, Development Environment, etc.).
 Note: it might overlap with other sections such 'Cloud System Design'.
@@ -1040,7 +1072,7 @@ In order to avoid populating those file in the working directory, one can use th
 5. Finally, with certain build systems, you can know which files are being used/relevant exactly based on the component of the project that the developer is focusing on. This, together with the `sparse checkout` can lead to a situation where only a small subset of the files are being populated in the working directory. Making commands like `git add`, `git status`, etc. really quick
 
 <a id="system-design-generic-systems"></a>
-### System Design - Generic Systems
+### Generic Systems
 
 This section covers system designs of different types of applications. Nothing too specific, but yet quite common in the real world as a type of application.
 
@@ -1169,7 +1201,7 @@ Vehicles
 </p>
 
 <a id="system-design-real-world-systems"></a>
-### System Design - Real-World Systems
+### Real-World Systems
 
 This section covers system designs of real world applications.
 
@@ -1183,7 +1215,7 @@ Each section here will include full details on the system. It's recommended, as 
 
 #### WhatsApp
 
-##### WhatsApp - Features / Functional Requirements
+##### Features / Functional Requirements
 
   * Messaging with individuals and groups (send and receive)
   * Sharing documents, images, videos
@@ -1191,7 +1223,7 @@ Each section here will include full details on the system. It's recommended, as 
   * Message status - delivered, read (and who read it)
   * Encryption - encrypt end-to-end communication
 
-##### WhatsApp - Non Functional Requirements
+##### Non Functional Requirements
 
   * Scale
   * Minimal Latency
@@ -1199,7 +1231,7 @@ Each section here will include full details on the system. It's recommended, as 
   * Consistency
   * Durability
 
-##### WhatsApp - API Spec
+##### API Spec
 
 Messaging:
 
@@ -1215,9 +1247,41 @@ User account:
   * Validate account
     * Input: API key, user ID, validation code
 
-##### WhatsApp - System Design Overview
+##### System Design Overview
 
-##### Whatsapp - System Design Components
+TODO
+
+##### System Design Components
+
+TODO
+
+#### Amazon Video Prime
+
+##### Features / Functional Requirements
+
+* Accounts
+  * Users have their account (they able to login or logout from it)
+* Uploading videos
+  * Support uploading videos (and video thumbnail) by content creators/producers
+  * Only certain accounts can upload videos not everyone
+  * Set limit for uploads
+    * Video length (e.g. 5 hours)
+    * Size per hour of video (if 5 hours and 1GB per hour = 5GB)
+    * Thumbnail size (e.g. 50 MB)
+* Streaming videos
+  * Users able to stream videos to different devices
+    * UI differ based on devices
+  * Buffering (over quality) (**Note**: A trade off)
+    * Store different quality versions of the same video
+* Browsing videos
+  * Be able to tag videos (genre, date, ...)
+  * Allow users to search for videos (based on name, tag, ...)
+
+##### Non Functional Requirements
+
+  * Reliability (Reliable video storage for storing uploaded videos and streaming them when needed)
+  * Scalability (be able to onboard users without hitting performance issues)
+  * High Availability (if one of the components fail, the system would still be usable)
 
 ## System Design Process
 
