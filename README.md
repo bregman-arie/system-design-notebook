@@ -1053,9 +1053,7 @@ Note: You might want to ask yourself these questions also after you've done perf
 
 ## Credits
 
-<div>The icon in the banner made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-
-The icons used in "General" exercises section and the system design index, created by Arie Bregman
+The project banner, the icons used in "General" exercises section and the system design index, designed by Arie Bregman
 
 ## Contributions
 
