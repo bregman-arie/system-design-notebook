@@ -26,6 +26,23 @@
 
 ## System Design
 
+### Requirements
+
+<!-- ALL-TOPICS-LIST:START -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<center>
+<table>
+  <tr>
+    <td align="center"><a href="requirements/README.md"><img src="images/requirements/requirements.png" width="160px;" alt="Requirements" /><br /><b>Requirements</b></a></td>
+    <td align="center"><a href="requirements/README.md#functional-requirements"><img src="images/requirements/functional_requirements.png" height="120px;" alt="Functional Requirements" /><br /><b>Functional Requirements</b></a></td>
+    <td align="center"><a href="requirements/README.md#non-functional-requirements"><img src="images/requirements/non_functional_requirements.png" height="120px;" alt="Requirements" /><br /><b>Non-Functional Requirements</b></a></td>
+  </tr>
+</table>
+</center>
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-TOPICS-LIST:END -->
 ### Basic Architecture
 
 <!-- ALL-TOPICS-LIST:START -->
@@ -53,6 +70,7 @@
     <td align="center"><a href="scalability/README.md"><img src="images/scalability/scalability.png" width="70px;" height="75px;" alt="Scalability" /><br /><b>Scalability</b></a></td>
     <td align="center"><a href="scalability/README.md#horizontal-scaling"><img src="images/scalability/horizontal_scaling_icon.png" width="300px;" height="75px;" alt="Horizontal Scaling" /><br /><b>Horizontal Scaling</b></a></td>
     <td align="center"><a href="scalability/README.md"><img src="images/scalability/vertical_scaling_icon.png" width="300px;" height="60px;" alt="Vertical Scaling" /><br /><b>Vertical Scaling</b></a></td>
+    <td align="center"><a href="scalability/README.md#scalability_factor"><img src="images/scalability/scalability_factor.png" width="100px;" height="80px;" alt="Scalability Factor" /><br /><b>Scalability Factor</b></a></td>
   </tr>
 </table>
 </center>
@@ -67,7 +85,8 @@
 <center>
 <table>
   <tr>
-    <td align="center"><a href="reliability_engineering/README.md"><img src="images/reliability_engineering/availability.png" width="70px;" height="75px;" alt="Availability" /><br /><b>Availability</b></a></td>
+    <td align="center"><a href="reliability_engineering/README.md"><img src="images/reliability_engineering/availability.png" width="100px;" height="105px;" alt="Availability" /><br /><b>Availability</b></a></td>
+    <td align="center"><a href="reliability_engineering/README.md"><img src="images/reliability_engineering/failover.png" width="100px;" height="105px;" alt="Availability" /><br /><b>Failover</b></a></td>
   </tr>
 </table>
 </center>
@@ -84,6 +103,7 @@
   <tr>
     <td align="center"><a href="services/load_balancer/README.md"><img src="images/services/load_balancer.png" width="75px;" height="75px;" alt="Load Balancer" /><br /><b>Load Balancer</b></a></td>
     <td align="center"><a href="services/api_gateway/README.md"><img src="images/services/api_gateway.png" width="75px;" height="75px;" alt="API Gateway" /><br /><b>API Gateway</b></a></td>
+    <td align="center"><a href="services/dns/README.md"><img src="images/dns/dns.png" width="75px;" height="75px;" alt="DNS" /><br /><b>DNS</b></a></td>
   </tr>
 </table>
 </center>
@@ -121,34 +141,7 @@
 <!-- prettier-ignore-end -->
 <!-- ALL-TOPICS-LIST:END -->
 
-* [Requirements](#requirements)
-  * [Functional Requirements](#functional-requirements)
-  * [Non-Functional Requirements](#non-functional-requirements)
-* [Basic architecture](#basic-architecture)
-  * [Client](#Client)
-  * Dispatcher
-* [Scalability](#scalability)
-  * [Vertical Scaling](#vertical-scaling)
-  * [Horizontal Scaling](#horizontal-scaling)
-  * [Scalability Factor](#scalability-factor)
-    * [Linear Scalability](#linear-scalability)
-    * [Sub-linear scalability](#sub-linear-scalability)
-    * [supra-linear scalability](#supra-linear-scalability)
-    * [Negative scalability](#negative-scalability)
-* Reliability
-* Serviceability
-* Performance
-* Resiliency
-* Durability
-* [Failover](#failover)
-  * [Cold Standby](#cold-standby)
-* Microservices Architecture
-* Monolith Architecture
-* Cache
-  * Distributed Cache
-  * Cache Policy (aka Replacement Policy)
-    * LRU (least recently used)
-* Fault Tolerance
+
 * [Distributed Systems](#distributed-systems)
   * [Fallacies of distributed systems](#fallacies-of-distributed-systems)
   * [Clock Drift](#clock-drift)
@@ -167,53 +160,6 @@
   * High level design
 
 ## Concepts Explained
-
-### Requirements
-
-Usually a system design process starts with understanding the system's purpose and one way to understand system's purpose or goal, is to clearly define a list of requirements.<br>
-These requirements allow us not only to understand how the system will be used and how it works, but also set clear boundaries which will make sure our design is focused on the right aspects of the system design. We usually distinguish between functional and non-functional requirements.
-
-### Functional Requirements
-
-Functional requirements are used to specify an expected function or a behaviour of the system. Simply put, something the system should be able to do.<br>
-For example, for a video streaming service a requirement might be to upload a video or comment on a video. For instant messaging application, a functional requirement will be, to be able send and receive messages.
-
-### Non-Functional Requirements
-
-Non-functional requirements focus on how the system performs, especially in general and not focusing on specific functions.<br>
-While such requirements might affect user's experience they shouldn't affect specific functionality or features the system supports.
-
-For example, if a system is a type of a service, a non-functional requirement might be "zero downtime" or "No loss of data".
-
-
-
-### Failover
-
-Failover (or failover strategy) is the process of switching upon a failure from non-operational system (application, storage, DB, ...) to an operational system or a previous operational state of the same system.
-
-It used to be done either automatically or manually. Today, especially in the era of public clouds, this process is often automated.
-
-#### Cold Standby
-
-TODO
-
-### Reliability
-
-[Wikipedia](https://en.wikipedia.org/wiki/Reliability,_availability_and_serviceability): "Reliability can be defined as the probability that a system will produce correct outputs up to some given time t.[5] Reliability is enhanced by features that help to avoid, detect and repair hardware faults. A reliable system does not silently continue and deliver results that include uncorrected corrupted data."
-
-Question: can you explain the difference between Availability and Reliability?
-
-### Serviceability
-
-[Wikipedia](https://en.wikipedia.org/wiki/Reliability,_availability_and_serviceability): "Serviceability or maintainability is the simplicity and speed with which a system can be repaired or maintained; if the time to repair a failed system increases, then availability will decrease."
-
-
-### DNS
-
-[Wikipedia](https://en.wikipedia.org/wiki/Domain_Name_System): "Most prominently, it translates more readily memorized domain names to the numerical IP addresses needed for locating and identifying computer services and devices with the underlying network protocols."
-
-In other words, the most common use can of a DNS would be a address translation. It can be from a hostname to IP address and vice versa - from an IP address to a hostname.
-In addition, a DNS can be used for load balancing, using the round robin technique.
 
 ### Distributed Systems
 
@@ -609,15 +555,8 @@ When there are less users accessing the website, scale down.
 </b></details>
 
 
-### Failover
 
-<details>
-<summary>Explain what is a "Failover". What does it happen?</summary><br><b>
-</b></details>
 
-<details>
-<summary>Explain "Cold Standby" failover strategy</summary><br><b>
-</b></details>
 ### Cache
 
 <details>
