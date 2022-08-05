@@ -2,7 +2,7 @@
 <img src="images/system_design_notebook.png"/>
 </p>
 
-> A curated collection of resources and exercises to help you learn about system design
+> An open source project to help you learn about system design step by step
 
 **NOTE:** The work on this repo is still in progress. Some information might be lacking or missing at this point.
 
@@ -85,8 +85,10 @@
 <center>
 <table>
   <tr>
-    <td align="center"><a href="reliability_engineering/README.md"><img src="images/reliability_engineering/availability.png" width="100px;" height="105px;" alt="Availability" /><br /><b>Availability</b></a></td>
-    <td align="center"><a href="reliability_engineering/README.md"><img src="images/reliability_engineering/failover.png" width="100px;" height="105px;" alt="Availability" /><br /><b>Failover</b></a></td>
+    <td align="center"><a href="reliability_engineering/README.md"><img src="images/reliability_engineering/availability.png" width="140px;" height="125px;" alt="Availability" /><br /><b>Availability</b></a></td>
+    <td align="center"><a href="reliability_engineering/README.md"><img src="images/reliability_engineering/failover.png" width="140px;" height="125px;" alt="Availability" /><br /><b>Failover</b></a></td>
+    <td align="center"><a href="reliability_engineering/README.md#cold-standby"><img src="images/reliability_engineering/cold.png" width="130px;" height="125px;" alt="Cold Standby" /><br /><b>Cold Standby</b></a></td>
+    <td align="center"><a href="reliability_engineering/README.md#warm-standby"><img src="images/reliability_engineering/warm.png" width="140px;" height="125px;" alt="Warm Standby" /><br /><b>Cold Standby</b></a></td>
   </tr>
 </table>
 </center>
@@ -161,7 +163,6 @@
 
 ## Exercises
 ### General
-
 #### "Elementary, my dear Watson"
 
 <details>
