@@ -88,7 +88,7 @@
     <td align="center"><a href="reliability_engineering/README.md"><img src="images/reliability_engineering/availability.png" width="140px;" height="125px;" alt="Availability" /><br /><b>Availability</b></a></td>
     <td align="center"><a href="reliability_engineering/README.md"><img src="images/reliability_engineering/failover.png" width="140px;" height="125px;" alt="Availability" /><br /><b>Failover</b></a></td>
     <td align="center"><a href="reliability_engineering/README.md#cold-standby"><img src="images/reliability_engineering/cold.png" width="130px;" height="125px;" alt="Cold Standby" /><br /><b>Cold Standby</b></a></td>
-    <td align="center"><a href="reliability_engineering/README.md#warm-standby"><img src="images/reliability_engineering/warm.png" width="140px;" height="125px;" alt="Warm Standby" /><br /><b>Cold Standby</b></a></td>
+    <td align="center"><a href="reliability_engineering/README.md#warm-standby"><img src="images/reliability_engineering/warm.png" width="140px;" height="125px;" alt="Warm Standby" /><br /><b>Warm Standby</b></a></td>
   </tr>
 </table>
 </center>
