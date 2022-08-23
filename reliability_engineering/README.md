@@ -9,6 +9,9 @@
     - [Warm Standby](#warm-standby)
       - [Advantages](#advantages-1)
       - [Disadvantages](#disadvantages)
+    - [Hot Standby](#hot-standby)
+      - [Advantages](#advantages-2)
+      - [Disatvanges](#disatvanges)
 - [Questions](#questions)
   - [Failover](#failover-1)
 # Reliability
@@ -75,6 +78,24 @@ The server itself isn't communicating with the standby database but the it is ac
 #### Disadvantages
 
 * There is a downtime. It's not as nearly as bad as in the case of Cold Standby, but data might still be lost and users will have bad experience, even if short time
+
+### Hot Standby
+
+Communicate simultaneously to two or more instances. In the case of databases, the server will read and write to both of them. It means that if one of them is down, the user won't experience downtime, since the server still communicates with one of the databases that holds the same data as the other instance.
+
+Another name for hot standby is basically horizontal scaling.
+
+<p align="center">
+<img src="../images/architecture/hot_standby.png"/>
+</p>
+
+#### Advantages
+
+* Zero downtime. Even if one database is going down, the other one can be used and the server already has communication with it so the users won't experience anything in regards to downtime.
+
+#### Disatvanges
+
+* Can be quite pricey, especially when compared to other strategies like cold and warm standby
 
 # Questions
 ## Failover
