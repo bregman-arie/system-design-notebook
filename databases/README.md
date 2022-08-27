@@ -7,10 +7,17 @@
     - [NoSQL](#nosql)
       - [MongoDB](#mongodb)
       - [Cassandra](#cassandra)
+      - [Redis](#redis)
+  - [Big Data](#big-data)
+    - [Data Lake](#data-lake)
   - [Replication](#replication)
   - [Partitioning](#partitioning)
     - [Horizontal Partitioning](#horizontal-partitioning)
     - [Vertical Partitioning](#vertical-partitioning)
+  - [ACID Compliance](#acid-compliance)
+  - [Normalization](#normalization)
+    - [Normalized Data](#normalized-data)
+    - [Denormalized Data](#denormalized-data)
   - [Questions](#questions)
 
 ## What is a Database?
@@ -49,6 +56,22 @@ NoSQL database. Its architecture can be can seen in the drawing below. Each node
 </p>
 
 While availability might be better in Cassandra compared to other databases, as each node can be the primary interface, it requires constantly synching them so consistency isn't at its top.
+
+#### Redis
+
+Redis is an in-memory database. It's considered to very fast database for this reason. The data in Redis is stored in key-value pairs.
+
+It's ideal for use cases where you need to read/write often from the DB, especially in real-time systems where you don't want to be limited by I/O of disks which considered to be slower (~100us for SSD vs ~100ns in case of RAM).
+
+Redis is also single threaded. You might wonder how does it work as such database can hit multiple incoming requests and outgoing responses, so how is the thread not blocked, waiting for completion? The answer is I/O multiplexing - the OS allows a single thread to wain on many connections simultaneously.
+
+## Big Data
+
+### Data Lake
+
+Data Lake is an approach in which te data is simply organized in text files (json, csv, etc.) and is stored in a storage system (e.g. S3, Blob Storage, etc.)
+
+The data in data lakes is often unstructured data and there is usually another process/service for creating schema for that data (in AWS for example that would be Amazon Glue)
 
 ## Replication
 
@@ -91,6 +114,47 @@ To summarize:
 <img src="../images/databases/vertical_partitioning.png"/>
 </p>
 
+## ACID Compliance
+
+<TODO>
+
+
+## Normalization
+### Normalized Data
+
+Data broken into multiple tables and in order to get the full data, you'd have to perform joins on different tables.
+
+This is the way rational databases work - there are relations between different tables and you perform lookups and joins to get full data set.
+
+The image below is an example of normalized data
+
+<p align="center">
+<img src="../images/databases/normalized_data.png"/>
+</p>
+
+Advantages:
+
+* Updates performed in one place since there is dedicated table for each data.
+
+Disadvantages:
+
+* To get data, you have to perform sometimes multiple lookups
+
+### Denormalized Data
+
+All the information is stored in one place as can be seen in the image below
+<p align="center">
+<img src="../images/databases/denormalized_data.png"/>
+</p>
+
+Advantages:
+
+* Single lookup/query to get all the information regarding specific entry
+
+Disadvantages:
+
+* To update information, a scan of all the entries/rows will have to be performed 
+
 ## Questions
 
 <details>
@@ -130,4 +194,32 @@ There are a couple mentioned in this page:
 
 <details>
 <summary>What is Resharding?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is denormalized data? Explain the advantages and disadvantages of denormalized data</summary><br><b>
+</b></details>
+
+<details>
+<summary>What is normalized data? Explain the advantages and disadvantages of normalized data</summary><br><b>
+</b></details>
+
+<details>
+<summary>When would you choose normalized data approach over denormalized data approach?</summary><br><b>
+
+There is not always a clear answer on that. That very much depends on user or customer experience and the queries that will be executed on the database.
+
+For example, if you need to perform updates quite often and of different columns or sub-documents, then a normalizied data might be a better approach.
+
+If it's mainly about performing lookups then in that case a denormalized data might work better. But again, it all depends on the specific scenario.
+</b></details>
+
+<details>
+<summary>What is a data lake?</summary><br><b>
+</b></details>
+
+<details>
+<summary>What can you say on in-memory database vs. disk-based database in regards to code implementation?</summary><br><b>
+
+Memory-based database are usually easier to implement or at least less complicated as you have to handle quite a lot of operations when writing/reading from a disk (opening a file, buffer allocation, closing a file, etc.)
 </b></details>
