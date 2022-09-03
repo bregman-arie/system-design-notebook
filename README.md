@@ -43,7 +43,8 @@
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-TOPICS-LIST:END -->
-### Basic Architecture
+
+### Compnents/Services
 
 <!-- ALL-TOPICS-LIST:START -->
 <!-- prettier-ignore-start -->
@@ -53,6 +54,9 @@
   <tr>
     <td align="center"><a href="basic_architecture/README.md"><img src="images/basic_architecture/server.png" width="120px;" height="40px;" alt="Server" /><br /><b>Server</b></a></td>
     <td align="center"><a href="basic_architecture/README.md"><img src="images/basic_architecture/client.png" width="100px;" height="100px;" alt="Client" /><br /><b>Client</b></a></td>
+      <td align="center"><a href="services/load_balancer/README.md"><img src="images/services/load_balancer.png" width="75px;" height="75px;" alt="Load Balancer" /><br /><b>Load Balancer</b></a></td>
+    <td align="center"><a href="services/api_gateway/README.md"><img src="images/services/api_gateway.png" width="75px;" height="75px;" alt="API Gateway" /><br /><b>API Gateway</b></a></td>
+    <td align="center"><a href="services/dns/README.md"><img src="images/dns/dns.png" width="75px;" height="75px;" alt="DNS" /><br /><b>DNS</b></a></td>
   </tr>
 </table>
 </center>
@@ -71,6 +75,7 @@
     <td align="center"><a href="scalability/README.md#horizontal-scaling"><img src="images/scalability/horizontal_scaling_icon.png" width="300px;" height="75px;" alt="Horizontal Scaling" /><br /><b>Horizontal Scaling</b></a></td>
     <td align="center"><a href="scalability/README.md"><img src="images/scalability/vertical_scaling_icon.png" width="300px;" height="60px;" alt="Vertical Scaling" /><br /><b>Vertical Scaling</b></a></td>
     <td align="center"><a href="scalability/README.md#scalability_factor"><img src="images/scalability/scalability_factor.png" width="100px;" height="80px;" alt="Scalability Factor" /><br /><b>Scalability Factor</b></a></td>
+    
   </tr>
 </table>
 </center>
@@ -99,22 +104,7 @@
 <!-- prettier-ignore-end -->
 <!-- ALL-TOPICS-LIST:END -->
 
-### Services
-<!-- ALL-TOPICS-LIST:START -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<center>
-<table>
-  <tr>
-    <td align="center"><a href="services/load_balancer/README.md"><img src="images/services/load_balancer.png" width="75px;" height="75px;" alt="Load Balancer" /><br /><b>Load Balancer</b></a></td>
-    <td align="center"><a href="services/api_gateway/README.md"><img src="images/services/api_gateway.png" width="75px;" height="75px;" alt="API Gateway" /><br /><b>API Gateway</b></a></td>
-    <td align="center"><a href="services/dns/README.md"><img src="images/dns/dns.png" width="75px;" height="75px;" alt="DNS" /><br /><b>DNS</b></a></td>
-  </tr>
-</table>
-</center>
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-<!-- ALL-TOPICS-LIST:END -->
+
 
 ### Networking
 <!-- ALL-TOPICS-LIST:START -->
@@ -139,6 +129,7 @@
 <table>
   <tr>
     <td align="center"><a href="databases/README.md"><img src="images/databases/database.png" width="70px;" height="75px;" alt="Databases" /><br /><b>Databases</b></a></td>
+    <td align="center"><a href="databases/README.md#cap-theorem"><img src="images/cap_theorem/cap.png"  width="100px;" alt="CAP" /><br /><b>CAP Theorem</b></a></td>
   </tr>
 </table>
 </center>
@@ -163,6 +154,21 @@
 <!-- prettier-ignore-end -->
 <!-- ALL-TOPICS-LIST:END -->
 
+### Database
+<!-- ALL-TOPICS-LIST:START -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<center>
+<table>
+  <tr>
+ 
+  </tr>
+</table>
+</center>
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-TOPICS-LIST:END -->
+  <td align="center"><a href="reliability_engineering/README.md"><br /><b></b></a></td>
 
 ## Exercises
 ### General

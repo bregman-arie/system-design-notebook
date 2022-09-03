@@ -7,6 +7,7 @@
     - [NoSQL](#nosql)
       - [MongoDB](#mongodb)
       - [Cassandra](#cassandra)
+      - [AWS DynamoDB](#aws-dynamodb)
       - [Redis](#redis)
   - [Big Data](#big-data)
     - [Data Lake](#data-lake)
@@ -15,9 +16,14 @@
     - [Horizontal Partitioning](#horizontal-partitioning)
     - [Vertical Partitioning](#vertical-partitioning)
   - [ACID Compliance](#acid-compliance)
+    - [Atomicity](#atomicity)
+    - [Consistency](#consistency)
+    - [Isolation](#isolation)
+    - [Durability](#durability)
   - [Normalization](#normalization)
     - [Normalized Data](#normalized-data)
     - [Denormalized Data](#denormalized-data)
+    - [CAP Theorem](#cap-theorem)
   - [Questions](#questions)
 
 ## What is a Database?
@@ -56,6 +62,14 @@ NoSQL database. Its architecture can be can seen in the drawing below. Each node
 </p>
 
 While availability might be better in Cassandra compared to other databases, as each node can be the primary interface, it requires constantly synching them so consistency isn't at its top.
+
+#### AWS DynamoDB
+
+TODO
+
+<p align="center">
+<img src="../images/databases/dynamodb_table.png"/>
+</p>
 
 #### Redis
 
@@ -116,8 +130,24 @@ To summarize:
 
 ## ACID Compliance
 
-<TODO>
+ACID Compliance is a set of database properties/principles guarantee data consistency and validity.
 
+### Atomicity 
+
+The rule of atomicity defines that either the entire transaction succeeds or it entirely fails.
+For example if you add data, either you added it completely or you didn't add it at all, there is adding the data partially. In other words, it done once completely or it doesn't happen at all.
+
+### Consistency 
+
+Consistency mean that whatever is written to the database would be returned if a moment after writing it, you perform a read operation.
+
+### Isolation
+
+One transaction won't interfere another transaction and the other transcation won't be affected by it in any case.
+
+### Durability
+
+Once a transcation is complete, the data stays in the database no matter what happens next (except delete operation of course). So if for example the database is getting showdown, rebooted, upgraded, ... the data remains as it is.
 
 ## Normalization
 ### Normalized Data
@@ -155,6 +185,15 @@ Disadvantages:
 
 * To update information, a scan of all the entries/rows will have to be performed 
 
+### CAP Theorem
+
+According to CAP Theorem (aka Brewer's theorem) any distributed DB can only achieve two out of the following three at any given point of time:
+
+* Consistency: For any read request, the most recent write is returned
+* Availability: The DB is highly available so any request gets a response
+* Partition Tolerance: In case of a network issue, the system will continue to operate? Can the database scale horizontally?
+
+CAP Theorem overtime became quite weak as most modern databases actually deal with all these aspects quite good.
 ## Questions
 
 <details>
@@ -222,4 +261,32 @@ If it's mainly about performing lookups then in that case a denormalized data mi
 <summary>What can you say on in-memory database vs. disk-based database in regards to code implementation?</summary><br><b>
 
 Memory-based database are usually easier to implement or at least less complicated as you have to handle quite a lot of operations when writing/reading from a disk (opening a file, buffer allocation, closing a file, etc.)
+</b></details>
+
+<details>
+<summary>When you see data in database, how do you know it was added there completely and not partially. In other words, how do you know that a write transaction to the database was completed successfully?</summary><br><b>
+
+Due to atomicity in [ACID Compliance](#acid-compliance).
+</b></details>
+
+<details>
+<summary>Explain the CAP Theorem</summary><br><b>
+</b></details>
+
+<details>
+<summary>How do you choose a database?</summary><br><b>
+
+Asking the following questions might help to narrow the choice:
+
+* Type of data you need to store (text, images, ...)
+* What is important for you? for example: consistency, availability, ... in general, trying to apply the CAP Theorem might be a good idea
+* Access patterns: do you mostly read data? write data? consistent traffic? unpredictable traffic with spikes?
+</b></details>
+
+<details>
+<summary>Apply the CAP Theorem on some of the modern databases</summary><br><b>
+
+* Cassandra: There is availability (there are multiple nodes) and there is partition-tolerance, but there is no consistency as there is no a single master in Cassandra and data has to by synched between all the nodes so you always get the same read, doesn't matter which node you approach
+
+* MongoDB: It's partition-tolerance as it scales horizontally and there are multiple shards. It's also consistent as it's single master. But since it's a single master architecture, there is no availability. There is a single point of failure (yes, even if you have more servers and backups as you'll need to restore and sync the data at a moment of failure).
 </b></details>
