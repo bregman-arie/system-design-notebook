@@ -12,7 +12,7 @@
 * The complexity of distributed system often hidden from the user
 
 <p align="center">
-<img src="images/distributed_systems/hidden_complexity.png"/>
+<img src="../images/distributed_systems/hidden_complexity.png"/>
 </p>
 
 ## Fallacies of distributed systems
