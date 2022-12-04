@@ -36,7 +36,7 @@ Vertical Scaling is about adding additional resources to *the existing system/co
   * Adding CPUs
 
 <p align="center">
-<img src="images/scalability/vertical_scaling.png"/>
+<img src="../images/scalability/vertical_scaling.png"/>
 </p>
 
 ### Use Cases
@@ -56,7 +56,7 @@ Few examples:
  * Instead of one database server, having two databases
 
 <p align="center">
-<img src="images/scalability/horizontal_scaling.png"/>
+<img src="../images/scalability/horizontal_scaling.png"/>
 </p>
 
 Point to think about: now that you know about vertical scaling and horizontal scaling, which one would you perform if you can choose only one of them?
